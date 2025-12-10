@@ -1,0 +1,36 @@
+.form {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.login-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  border: 1px solid black;
+}
+
+.h-500px {
+  height: 500px;
+}
+
+.item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  gap: 2px;
+}
+
+.itemStatus {
+  width: 20px;
+}
+
+.itemJobName {
+  width: 20px;
+}
+
+.iframe {
+  width: 100%;
+  padding-top: 20px;
+  height: 600px;
+}

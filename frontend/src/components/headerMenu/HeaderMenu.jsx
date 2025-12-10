@@ -1,0 +1,112 @@
+import { Link, useMatch, useNavigate } from "react-router-dom";
+import UserContext from "../../context";
+import { useContext, useEffect, useMemo } from "react";
+import "./styles.css";
+
+const HeaderMenu = () => {
+  const navigate = useNavigate();
+  const navigateToRegister = () => {
+    navigate("/register");
+  };
+
+  const navigateToLogin = () => {
+    navigate("/login");
+  };
+
+  const { user, setUser } = useContext(UserContext);
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser({ type: "LOGOUT" });
+  };
+
+  const routes = useMemo(
+    () => [
+      ...(user?.role === "BUSINESS"
+        ? [
+            {
+              to: "/business/job",
+              name: "Quản lý công việc",
+            },
+          ]
+        : []),
+      ...(user?.role === "JOB_SEEKER"
+        ? [
+            {
+              to: "/jobseeker/cv",
+              name: "Quản lý CV",
+            },
+          ]
+        : []),
+    ],
+    [user]
+  );
+
+  return (
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <Link class="navbar-brand" to="/home">
+          Website
+        </Link>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {routes.map((item, index) => (
+              <li class="nav-item" key={index}>
+                <Link class="nav-link active" aria-current="page" to={item.to}>
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div class="d-flex gap-2">
+            {user ? (
+              <>
+                <div className="d-flex justify-content-center align-items-center gap-3">
+                  {user?.name}
+                  <img className="image" src={user?.avatar} />
+                </div>
+                <button
+                  class="btn btn-outline-danger"
+                  type="button"
+                  onClick={logout}
+                >
+                  đăng xuất
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  class="btn btn-outline-primary"
+                  type="button"
+                  onClick={navigateToLogin}
+                >
+                  đăng nhập
+                </button>
+                <button
+                  class="btn btn-outline-success"
+                  type="button"
+                  onClick={navigateToRegister}
+                >
+                  đăng ký
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default HeaderMenu;
