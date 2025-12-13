@@ -3,23 +3,36 @@ import { handleError } from "../../utils/errorAlertUtil";
 import { apiUtil, end_point } from "../../utils/apiUtil";
 import { useEffect, useState } from "react";
 
-const AppSelect = ({ setValue, endPointKey, defaultValue = [], value }) => {
+const AppSelect = ({
+  setValue,
+  endPointKey,
+  defaultValue = [],
+  value,
+  extraQueryKey,
+  extraQueryValue,
+}) => {
   const [data, setData] = useState(defaultValue);
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState({ value: 0 });
   const [keyword, setKeyword] = useState();
   const [isOpen, setIsOpen] = useState(false);
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
-    if (defaultValue[0]?.id) {
-      setData(defaultValue);
+    if (check) {
+      setValue(null);
     }
-  }, [defaultValue]);
+    setCheck(true);
+  }, [extraQueryValue]);
 
   const getData = async (offset, keyword) => {
     try {
       let url = `${end_point[endPointKey]}?`;
       if (keyword) {
         url += `&keyword=${keyword}`;
+      }
+
+      if (extraQueryKey) {
+        url += `&${extraQueryKey}=${extraQueryValue}`;
       }
       if (offset) {
         url += `&offset=${offset}`;
@@ -43,7 +56,7 @@ const AppSelect = ({ setValue, endPointKey, defaultValue = [], value }) => {
   };
 
   const onChange = (value) => {
-    setValue(value.id);
+    setValue(value.id, value.name);
   };
 
   const onInputChange = (value) => {
@@ -51,13 +64,13 @@ const AppSelect = ({ setValue, endPointKey, defaultValue = [], value }) => {
   };
 
   const onMenuScrollToBottom = () => {
-    setOffset(offset + 1);
+    setOffset({ value: offset.value + 1 });
   };
 
   useEffect(() => {
     if (isOpen) {
       const id = setTimeout(() => {
-        setOffset(0);
+        offset.value = 0;
         getData(0, keyword);
       }, 1000);
 
@@ -68,21 +81,22 @@ const AppSelect = ({ setValue, endPointKey, defaultValue = [], value }) => {
   }, [keyword]);
 
   useEffect(() => {
-    if (offset) {
-      getData(offset, keyword);
+    if (offset && isOpen) {
+      getData(offset.value, keyword);
     }
   }, [offset]);
 
   useEffect(() => {
     if (isOpen) {
-      setOffset(0);
+      offset.value = 0;
       getData(0, keyword);
     }
   }, [isOpen]);
 
   return (
     <Select
-      value={data.filter((item) => item.id === value)[0]}
+      data-testid="app-select"
+      value={data.filter((item) => item.id === value)[0] ?? 0}
       onMenuOpen={onMenuOpen}
       onMenuClose={onMenuClose}
       onInputChange={onInputChange}

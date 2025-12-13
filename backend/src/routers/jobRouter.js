@@ -9,7 +9,11 @@ const typeService = require("../services/typeService");
 const setRouter = (app) => {
   const router = Router();
 
-  router.get("/", securityFilter.getRolesFilter(["ANY"]) ,jobController.getJobs);
+  router.get(
+    "/",
+    securityFilter.getRolesFilter(["ANY"]),
+    jobController.getJobs
+  );
   router.get(
     "/:id",
     securityFilter.getRolesFilter(["ANY"]),
@@ -25,18 +29,25 @@ const setRouter = (app) => {
     ),
     jobController.createJob
   );
-  router.patch(
+  router.put(
     "/:id",
     securityFilter.getRolesFilter(["BUSINESS", "ADMIN"]),
-    securityFilter.getUpdateFilter(jobService, [
-      "name",
-      "createdDate",
-      "description",
-      "payment",
-      "userId",
-      "typeId",
-      "id",
-    ]),
+    securityFilter.getUpdateFilter(
+      jobService,
+      [
+        "name",
+        "createdDate",
+        "description",
+        "payment",
+        "userId",
+        "typeId",
+        "id",
+      ],
+      [
+        { key: "userId", service: userService },
+        { key: "typeId", service: typeService },
+      ]
+    ),
     jobController.updateJob
   );
 

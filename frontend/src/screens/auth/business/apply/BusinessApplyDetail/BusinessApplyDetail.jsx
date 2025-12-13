@@ -55,7 +55,7 @@ const BusinessApplyDetail = () => {
   const customSubmit = async (data) => {
     data.status = "PASS";
     try {
-      const res = await authApiUtil().patch(
+      const res = await authApiUtil().put(
         end_point["apply-detail"](applyId),
         data
       );
@@ -68,7 +68,7 @@ const BusinessApplyDetail = () => {
   const denyApply = async (data) => {
     data.status = "FAIL";
     try {
-      const res = await authApiUtil().patch(
+      const res = await authApiUtil().put(
         end_point["apply-detail"](applyId),
         data
       );

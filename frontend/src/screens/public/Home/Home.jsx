@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../../../components/searchBar/SearchBar";
-import { apiUtil, authApiUtil, end_point } from "../../../utils/apiUtil";
+import { apiUtil, end_point } from "../../../utils/apiUtil";
 import { handleError } from "../../../utils/errorAlertUtil";
 import "./styles.css";
 

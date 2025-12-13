@@ -4,6 +4,7 @@ import { authApiUtil, end_point } from "../../utils/apiUtil";
 import { handleError } from "../../utils/errorAlertUtil";
 import { useEffect, useState } from "react";
 import SearchBar from "../searchBar/SearchBar";
+import Loading from "../Loading/Loading";
 
 const map = {
   id: "id",
@@ -22,8 +23,11 @@ const map = {
 const Table = ({ list, setList, url, endPointKey, fields, searchFields }) => {
   const navigate = useNavigate();
   const [params, setParams] = useState({ offset: 0 });
+  const [isLoading, setLoading] = useState(true);
 
   const getList = async () => {
+    setLoading(true);
+    console.log(params)
     try {
       let url = `${end_point[endPointKey]}?`;
       Object.keys(params).forEach((key) => {
@@ -36,10 +40,12 @@ const Table = ({ list, setList, url, endPointKey, fields, searchFields }) => {
     } catch (ex) {
       handleError(ex);
     }
+    setLoading(false);
   };
 
   const deleteHandler = (id) => {
     return async () => {
+      setLoading(true);
       try {
         await authApiUtil().delete(end_point[`${endPointKey}-detail`](id));
         const newDataList = list.filter((item) => item.id !== id);
@@ -47,12 +53,18 @@ const Table = ({ list, setList, url, endPointKey, fields, searchFields }) => {
       } catch (ex) {
         handleError(ex);
       }
+      setLoading(false);
     };
   };
 
   useEffect(() => {
     getList();
   }, [params]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <SearchBar fields={searchFields} setParentParams={setParams} />

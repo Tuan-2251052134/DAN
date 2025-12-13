@@ -1,11 +1,12 @@
 import Select from "react-select";
-import AppSelect from "../AppSelect/AppSelect";
+import AppSelect from "../appSelect/AppSelect";
 import "./styles.css";
 import { handleError } from "../../utils/errorAlertUtil";
 import { useEffect, useState } from "react";
 import { authApiUtil, end_point } from "../../utils/apiUtil";
 import { useNavigate } from "react-router-dom";
 import timeUtil from "../../utils/timeUtil";
+import Loading from "../Loading/Loading";
 
 const Form = ({
   fields,
@@ -27,8 +28,10 @@ const Form = ({
   ];
   const [data, setData] = useState(defaultValue);
   const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
 
   const getData = async () => {
+    setLoading(true);
     try {
       const res = await authApiUtil().get(
         end_point[`${endPointKey}-detail`](id)
@@ -36,7 +39,6 @@ const Form = ({
       const foundData = res.data.data;
 
       if (foundData) {
-        console.log({ ...foundData, ...data });
         setData({ ...foundData, ...data });
       } else {
         alert("thể loại này không tồn tại");
@@ -45,30 +47,35 @@ const Form = ({
     } catch (ex) {
       handleError(ex);
     }
+    setLoading(false);
   };
 
   const submit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     try {
       if (customSubmit) {
         await customSubmit(data);
+        setLoading(false);
         return;
       }
 
       if (id) {
-        console.log(data);
-        await authApiUtil().patch(end_point[`${endPointKey}-detail`](id), data);
+        await authApiUtil().put(end_point[`${endPointKey}-detail`](id), data);
         alert("cập nhật thành công");
       } else {
+        console.log(data);
         const res = await authApiUtil().post(end_point[endPointKey], data);
         afterSubmit?.(res.data.data);
       }
     } catch (ex) {
       handleError(ex);
     }
+    setLoading(false);
   };
 
   const deleteHandler = async () => {
+    setLoading(true);
     try {
       await authApiUtil().delete(end_point[`${endPointKey}-detail`](id));
       alert("đã xoá thành công");
@@ -76,11 +83,16 @@ const Form = ({
     } catch (ex) {
       handleError(ex);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
     id && getData();
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <form onSubmit={submit} className={`form ${col4 ? "col-4" : "col-8"}`}>
@@ -146,14 +158,22 @@ const Form = ({
                 <AppSelect
                   defaultValue={[
                     {
-                      id: data[`${field.key}.id`],
+                      id: data[`${field.key}Id`],
                       name: data[`${field.key}.name`],
                     },
                   ]}
-                  value={data[`${field.key}Id`] ?? data[`${field.key}.id`]}
+                  extraQueryKey={field.extraQueryKey}
+                  extraQueryValue={
+                    field.extraQueryValueKey && data[field.extraQueryValueKey]
+                  }
+                  value={data[`${field.key}Id`]}
                   endPointKey={field.endPointKey}
-                  setValue={(value) => {
-                    setData({ ...data, [`${field.key}Id`]: value });
+                  setValue={(id, name) => {
+                    setData({
+                      ...data,
+                      [`${field.key}Id`]: id,
+                      [`${field.key}.name`]: name,
+                    });
                   }}
                 />
               </div>
@@ -171,7 +191,15 @@ const Form = ({
             {field.type === "image" && (
               <div class="mb-3" key={index}>
                 <div className="d-flex flex-column gap-3 align-items-center justify-content-center">
-                  <img src={data[field.key]} className="login-image" />
+                  <img
+                    src={
+                      data[field.key] &&
+                      (typeof data[field.key] === "string"
+                        ? data[field.key]
+                        : URL.createObjectURL(data[field.key]))
+                    }
+                    className="login-image"
+                  />
                 </div>
                 <input
                   class="form-control mt-2"

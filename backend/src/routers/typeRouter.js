@@ -15,10 +15,10 @@ const setRouter = (app) => {
     securityFilter.getCreateFilter(["name"], null, []),
     typeController.createType
   );
-  router.patch(
+  router.put(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getUpdateFilter(typeService, ["id"]),
+    securityFilter.getUpdateFilter(typeService, ["id"], []),
     typeController.updateType
   );
   router.delete(

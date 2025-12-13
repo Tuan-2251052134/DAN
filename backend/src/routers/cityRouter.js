@@ -15,10 +15,10 @@ const setRouter = (app) => {
     securityFilter.getCreateFilter(["name"], null, []),
     cityController.createCity
   );
-  router.patch(
+  router.put(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getUpdateFilter(cityService, ["id"]),
+    securityFilter.getUpdateFilter(cityService, ["id"], []),
     cityController.updateCity
   );
   router.delete(

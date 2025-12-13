@@ -4,8 +4,10 @@ const uploadFileUtil = require("../utils/uploadFileUtil");
 const getCVs = async (req, res) => {
   const name = req.query.name;
   const offset = req.query.offset ?? 0;
-  const userId = req.user.id;
+  const user = req.user;
 
+  let userId = user.role === "ADMIN" ? req.query.userId : user.id;
+  
   const cvs = await cvSerivce.getAll({ name, offset, userId });
   res.status(200).json({ data: cvs, errorMessage: null });
 };

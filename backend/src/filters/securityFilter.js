@@ -14,7 +14,7 @@ const getRolesFilter = (roles) => {
     if (!token && !roles.includes("ANY")) {
       throw new AppError("Chưa xác thực quyền", 401);
     }
-    
+
     if (token) {
       const decoded = securityUtil.decodeJwt(token);
       if (!roles.includes(decoded.role) && !roles.includes("ANY")) {
@@ -84,33 +84,32 @@ const getCreateFilter = (keys, roles, foreignFields) => {
     const user = req.user;
     const file = req.file;
 
-    if (file) {
-      body.file = file;
-    }
-
     if (!body) {
       throw new AppError("body trống", 400);
     }
+
+    body.file = file;
 
     for (let key of keys) {
       if (!body[key]) {
         throw new AppError(`không để trống trường: ${key}`, 400);
       }
     }
+    if (user) {
+      if (user.role === "ADMIN") {
+        if (keys.includes("userId")) {
+          const foundUser = await userService.getOne({ id: body.userId });
 
-    if (user.role === "ADMIN") {
-      if (keys.includes("userId")) {
-        const foundUser = await userService.getOne({ id: body.userId });
-
-        if (!roles.includes(foundUser.role)) {
-          throw new AppError(
-            `Không thể tạo cho vai trò ${foundUser.role}`,
-            400
-          );
+          if (!roles.includes(foundUser.role)) {
+            throw new AppError(
+              `Không thể tạo cho vai trò ${foundUser.role}`,
+              400
+            );
+          }
         }
+      } else if (keys.includes("userId") && user.id != body.userId) {
+        throw new AppError(`Không thể tạo đối tượng cho người khác`, 403);
       }
-    } else if (keys.includes("userId") && user.id != body.userId) {
-      throw new AppError(`Không thể tạo đối tượng cho người khác`, 403);
     }
 
     for (let foreignField of foreignFields) {
@@ -127,7 +126,7 @@ const getCreateFilter = (keys, roles, foreignFields) => {
 };
 
 // update
-const getUpdateFilter = (service, constantFields) => {
+const getUpdateFilter = (service, constantFields, foreignFields) => {
   return async (req, res, next) => {
     const user = req.user;
     const file = req.file;
@@ -162,6 +161,18 @@ const getUpdateFilter = (service, constantFields) => {
         throw new AppError(`Không thể thay đổi trường: ${field}`, 400);
       }
     }
+
+    for (let foreignField of foreignFields) {
+      if (!body[foreignField.key]) {
+        throw new AppError(`Trường ${foreignField.key} bị trống`, 400);
+      }
+      const refObj = await service.getOne({ id: body[foreignField.key] });
+
+      if (!refObj) {
+        throw new AppError(`Trường này ${foreignField.key} không tồn tại`, 400);
+      }
+    }
+
     next();
   };
 };

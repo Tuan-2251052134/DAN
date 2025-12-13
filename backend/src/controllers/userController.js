@@ -49,25 +49,6 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   const user = req.body;
 
-  req.file ?? (errorMessage += "avatar");
-
-  checkUtil.checkNullField(user, [
-    "email",
-    "password",
-    "districtId",
-    "role",
-    "name",
-  ]);
-
-  if (user.role === "ADMIN") {
-    throw new AppError("lỗi dữ liệu không thể đăng ký với vai trò admin", 400);
-  }
-
-  const district = districtService.getOne({ id: user.districtId });
-  if (!district) {
-    throw new AppError("không có quận này", 400);
-  }
-
   const foundUser = await userSerivce.getOne({ email: user.email });
   if (foundUser) {
     throw new AppError("Email đã tồn tại", 400);
@@ -75,7 +56,7 @@ const register = async (req, res) => {
 
   user.password = await securityUtil.hashPassword(user.password);
   user.avatar = await uploadFileUtil.uploadFile(req.file.buffer);
-  const newUser = await userSerivce.register(user);
+  const newUser = await userSerivce.register({ user });
 
   res.status(200).json({ data: newUser, errorMessage: null });
 };
@@ -88,6 +69,30 @@ const getUsers = async (req, res) => {
   res.status(200).json({ data: users, errorMessage: null });
 };
 
-const getUserProfile = async (req, res) => {};
+const getUser = async (req, res) => {
+  const id = req.params.id;
+  const currentUser = req.user;
 
-module.exports = { login, register, getUsers };
+  if (!currentUser) {
+    throw new AppError("Chưa xác thực quyền", 401);
+  }
+
+  const user = await userSerivce.getDetailOne({ id });
+
+  if (currentUser.role !== "ADMIN" && currentUser.id != user.id) {
+    throw new AppError("Không có quyền để truy cập", 403);
+  }
+
+  res.status(200).json({ data: user, errorMessage: null });
+};
+
+const updateUser = async (req, res) => {
+  const id = req.params.id;
+  const user = req.body;
+
+  const updatedUser = await userSerivce.update({ id, user });
+
+  res.status(200).json({ data: updatedUser, errorMessage: null });
+};
+
+module.exports = { login, register, getUsers, getUser, updateUser };

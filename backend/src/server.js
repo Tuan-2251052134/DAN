@@ -34,3 +34,5 @@ errorConfig.setConfig(app);
 app.listen(8080, () => {
   console.log("chào Lý Gia Tuấn, rất vui được gặp bạn");
 });
+
+module.exports = app;

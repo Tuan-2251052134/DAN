@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Form from "../../components/form/Form";
+
 import { apiUtil, end_point } from "../../utils/apiUtil";
 import { handleError } from "../../utils/errorAlertUtil";
+import Form from "../../components/form/Form";
 
 const Register = () => {
   const [user, setUser] = useState({});

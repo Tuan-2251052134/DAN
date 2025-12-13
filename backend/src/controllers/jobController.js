@@ -43,7 +43,6 @@ const getJobs = async (req, res) => {
     status = "PASS";
   }
 
-  console.log(user);
 
   if ((userId && user.id != userId) && user.role !== "ADMIN") {
     throw new AppError("Bạn không có quyền xem", 401);

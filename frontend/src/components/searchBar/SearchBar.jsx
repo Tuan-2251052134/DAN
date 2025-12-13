@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AppSelect from "../AppSelect/AppSelect";
+import AppSelect from "../appSelect/AppSelect";
 import "./styles.css";
 
 const SearchBar = ({ fields, setParentParams }) => {
@@ -30,6 +30,7 @@ const SearchBar = ({ fields, setParentParams }) => {
           {field.type === "app-select" && (
             <div className="w-100">
               <AppSelect
+                value={params[`${field.key}Id`]}
                 endPointKey={field.endPointKey}
                 setValue={(value) => {
                   setParams({ ...params, [`${field.key}Id`]: value });

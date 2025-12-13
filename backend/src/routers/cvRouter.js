@@ -4,6 +4,7 @@ const cvController = require("../controllers/cvController");
 const multerFilter = require("../filters/multerFilter");
 const cvSerivce = require("../services/cvService");
 const applyService = require("../services/applyService");
+const userSerivce = require("../services/userService");
 
 const setRouter = (app) => {
   const router = Router();
@@ -29,11 +30,14 @@ const setRouter = (app) => {
     ),
     cvController.createCV
   );
-  router.patch(
+  router.put(
     "/:id",
     multerFilter.single("cvFile"),
     securityFilter.getRolesFilter(["ADMIN", "JOB_SEEKER"]),
-    securityFilter.getUpdateFilter(cvSerivce, []),
+    securityFilter.getUpdateFilter(cvSerivce, ["id", "userId"], {
+      key: "userId",
+      service: userSerivce,
+    }),
     cvController.updateCV
   );
   router.delete(
@@ -43,7 +47,7 @@ const setRouter = (app) => {
     cvController.deleteCV
   );
 
-  app.use("/api/cv/", router);
+  app.use("/api/cv", router);
 };
 
 module.exports = { setRouter };

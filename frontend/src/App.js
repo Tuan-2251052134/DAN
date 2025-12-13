@@ -34,6 +34,8 @@ import PublicJobDetail from "./screens/public/PublicJobDetail/PublicJobDetail";
 import Register from "./screens/public/Register";
 import BusinessApplyList from "./screens/auth/business/apply/BusinessApplyList/BusinessApplyList";
 import BusinessApplyDetail from "./screens/auth/business/apply/BusinessApplyDetail/BusinessApplyDetail";
+import UserDetail from "./screens/auth/admin/user/UserDetail";
+import CVList from "./screens/auth/admin/cv/CVList";
 
 const MenuProvider = ({ menuType }) => {
   if (menuType === "ADMIN") {
@@ -97,7 +99,8 @@ function App() {
 
                 <Route path={"apply"} element={<div>apply</div>} />
 
-                <Route path={"cv"} element={<div>cv</div>} />
+                <Route path={"cv"} element={<CVList />} />
+                <Route path={"cv/:id"} element={<div>detail</div>} />
 
                 <Route path={"district"} element={<DistrictList />} />
                 <Route path={"district/:id"} element={<DistrictDetail />} />
@@ -109,7 +112,7 @@ function App() {
                 <Route path={"type/:id"} element={<TypeDetail />} />
 
                 <Route path={"user"} element={<UserList />} />
-                <Route path={"user/:id"} element={</>} />
+                <Route path={"user/:id"} element={<UserDetail />} />
               </Route>
             </Route>
 

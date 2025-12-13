@@ -1,5 +1,5 @@
 const { raw } = require("mysql2");
-const { User, District, Job } = require("../models");
+const { User, District, City } = require("../models");
 const { Op } = require("sequelize");
 
 const register = async ({ user }) => {
@@ -14,7 +14,19 @@ const getOne = async ({ email, id }) => {
   if (id) {
     where.id = id;
   }
-  return await User.findOne({ where: where, raw: true });
+  return await User.findOne({
+    where: where,
+    raw: true,
+    attributes: [
+      "id",
+      "districtId",
+      "address",
+      "role",
+      "name",
+      "email",
+      "avatar",
+    ],
+  });
 };
 
 const getAll = async ({ name, offset }) => {
@@ -39,20 +51,39 @@ const getAll = async ({ name, offset }) => {
   });
 };
 
-const getUserProfile = async ({ id }) => {
+const getDetailOne = async ({ id }) => {
+  const where = {};
+  if (id) {
+    where.id = id;
+  }
   return await User.findOne({
-    where: { id: id },
+    where: where,
+    raw: true,
+    attributes: [
+      "id",
+      "districtId",
+      "address",
+      "role",
+      "name",
+      "email",
+      "avatar",
+    ],
     include: [
       {
         model: District,
-      },
-      {
-        model: Job,
-        limit,
+        as: "district",
+        include: [
+          {
+            model: City,
+            as: "city",
+          },
+        ],
       },
     ],
-    raw: true,
   });
 };
 
-module.exports = { register, getOne, getAll };
+const update = async ({ id, user }) => {
+  return await User.update(user, { where: { id: id }, raw: true });
+};
+module.exports = { register, getOne, getAll, getDetailOne, update };

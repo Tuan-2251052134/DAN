@@ -30,15 +30,14 @@ const setRouter = (app) => {
     securityFilter.getRolesFilter(["ADMIN", "BUSINESS"]),
     applyController.getApply
   );
-  router.patch(
+  router.put(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN", "BUSINESS"]),
-    securityFilter.getUpdateFilter(applyService, [
-      "createdDate",
-      "cvId",
-      "id",
-      "jobId",
-    ]),
+    securityFilter.getUpdateFilter(
+      applyService,
+      ["createdDate", "cvId", "id", "jobId"],
+      []
+    ),
     applyController.updateApply
   );
   router.delete(

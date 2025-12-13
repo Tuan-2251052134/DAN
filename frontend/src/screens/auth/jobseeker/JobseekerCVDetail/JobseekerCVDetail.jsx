@@ -25,7 +25,7 @@ const JobseekerCVDetail = () => {
       formData.append("id", data.id);
       formData.append("cvFile", data.cvFile);
       formData.append("name", data.name);
-      const res = await authApiUtil().patch(
+      const res = await authApiUtil().put(
         end_point["cv-detail"](id),
         formData,
         {

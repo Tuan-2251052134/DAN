@@ -18,10 +18,14 @@ const setRouter = (app) => {
     ]),
     districtController.createDistrict
   );
-  router.patch(
+  router.put(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getUpdateFilter(districtService, ["id"]),
+    securityFilter.getUpdateFilter(
+      districtService,
+      ["id"],
+      [{ key: "cityId", service: cityService }]
+    ),
     districtController.updateDistrict
   );
   router.delete(
@@ -35,7 +39,7 @@ const setRouter = (app) => {
     districtController.deleteDistrict
   );
 
-  app.use("/api/district/", router);
+  app.use("/api/district", router);
 };
 
 module.exports = { setRouter };
