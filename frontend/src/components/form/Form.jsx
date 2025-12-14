@@ -38,6 +38,8 @@ const Form = ({
       );
       const foundData = res.data.data;
 
+      console.log(foundData);
+
       if (foundData) {
         setData({ ...foundData, ...data });
       } else {
@@ -55,18 +57,20 @@ const Form = ({
     setLoading(true);
     try {
       if (customSubmit) {
-        await customSubmit(data);
+        const newData = await customSubmit(data);
+        if (!id) {
+          afterSubmit?.(newData);
+        }
         setLoading(false);
-        return;
-      }
-
-      if (id) {
-        await authApiUtil().put(end_point[`${endPointKey}-detail`](id), data);
-        alert("cập nhật thành công");
       } else {
-        console.log(data);
-        const res = await authApiUtil().post(end_point[endPointKey], data);
-        afterSubmit?.(res.data.data);
+        if (id) {
+          await authApiUtil().put(end_point[`${endPointKey}-detail`](id), data);
+          alert("cập nhật thành công");
+        } else {
+          console.log(data);
+          const res = await authApiUtil().post(end_point[endPointKey], data);
+          afterSubmit?.(res.data.data);
+        }
       }
     } catch (ex) {
       handleError(ex);

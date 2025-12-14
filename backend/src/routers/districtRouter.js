@@ -13,9 +13,12 @@ const setRouter = (app) => {
   router.post(
     "/",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getCreateFilter(["name", "cityId"], null, [
-      { key: "cityId", service: cityService },
-    ]),
+    securityFilter.getCreateFilter(
+      ["name", "cityId"],
+      null,
+      [{ key: "cityId", service: cityService }],
+      "quận"
+    ),
     districtController.createDistrict
   );
   router.put(
@@ -24,7 +27,8 @@ const setRouter = (app) => {
     securityFilter.getUpdateFilter(
       districtService,
       ["id"],
-      [{ key: "cityId", service: cityService }]
+      [{ key: "cityId", service: cityService }],
+      "quận"
     ),
     districtController.updateDistrict
   );
@@ -33,8 +37,9 @@ const setRouter = (app) => {
     securityFilter.getRolesFilter(["ADMIN"]),
     securityFilter.getDeleteFilter(
       districtService,
-      [userService],
-      "districtId"
+      [{ service: userService, label: "người dùng" }],
+      "districtId",
+      "quận"
     ),
     districtController.deleteDistrict
   );

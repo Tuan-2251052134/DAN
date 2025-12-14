@@ -12,19 +12,24 @@ const setRouter = (app) => {
   router.post(
     "/",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getCreateFilter(["name"], null, []),
+    securityFilter.getCreateFilter(["name"], null, [], "loại"),
     typeController.createType
   );
   router.put(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getUpdateFilter(typeService, ["id"], []),
+    securityFilter.getUpdateFilter(typeService, ["id"], [], "loại"),
     typeController.updateType
   );
   router.delete(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getDeleteFilter(typeService, [jobService], "typeId"),
+    securityFilter.getDeleteFilter(
+      typeService,
+      [{ service: jobService, label: "công việc" }],
+      "typeId",
+      "loại"
+    ),
     typeController.deleteType
   );
 

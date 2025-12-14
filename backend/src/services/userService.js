@@ -25,6 +25,7 @@ const getOne = async ({ email, id }) => {
       "name",
       "email",
       "avatar",
+      "password",
     ],
   });
 };

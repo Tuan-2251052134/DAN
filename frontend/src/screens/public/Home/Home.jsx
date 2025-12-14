@@ -19,7 +19,7 @@ const Home = () => {
     {
       type: "app-select",
       endPointKey: "type",
-      key: "typeId",
+      key: "type",
     },
   ];
 
@@ -39,6 +39,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    console.log(params)
     getJobs();
   }, [params]);
 
@@ -48,7 +49,7 @@ const Home = () => {
         <SearchBar fields={fields} setParentParams={setParams} />
       </div>
       {jobs.map((job) => (
-        <div class="card">
+        <div class="card mt-2">
           <div class="card-header">{job.typeId}</div>
           <div class="card-body">
             <h5 class="card-title">{job.name}</h5>

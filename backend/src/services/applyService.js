@@ -1,18 +1,18 @@
 const { Apply, CV, User } = require("../models");
 
-const getOne = async ({ jobId, applyId, id }) => {
+const getOne = async ({ jobId, cvId, id }) => {
   const where = {};
 
   if (id) {
     where.id = id;
   }
-  
+
   if (jobId) {
     where.jobId = jobId;
   }
 
-  if (applyId) {
-    where.applyId = applyId;
+  if (cvId) {
+    where.cvId = cvId;
   }
 
   return await Apply.findOne({ where: where, raw: true });

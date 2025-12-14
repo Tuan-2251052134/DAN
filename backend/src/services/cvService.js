@@ -1,5 +1,5 @@
 const { Op, where } = require("sequelize");
-const { CV, Apply, Job } = require("../models");
+const { CV, Apply, Job, User } = require("../models");
 const { raw } = require("mysql2");
 
 const getAll = async ({ name, offset, userId }) => {
@@ -24,7 +24,17 @@ const create = async ({ cv }) => {
 };
 
 const getOne = async ({ id }) => {
-  return await CV.findOne({ where: { id: id }, raw: true });
+  return await CV.findOne({
+    where: { id: id },
+    raw: true,
+    include: [
+      {
+        model: User,
+        as: "user",
+        attributes: ["id", "name"],
+      },
+    ],
+  });
 };
 
 const getDetailOne = async ({ id }) => {

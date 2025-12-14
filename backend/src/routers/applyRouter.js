@@ -14,8 +14,8 @@ const setRouter = (app) => {
       ["cvId", "jobId"],
       ["JOB_SEEKER"],
       [
-        { key: "cvId", service: cvService },
-        { key: "jobId", service: jobService },
+        { key: "cvId", service: cvService, label: "cv" },
+        { key: "jobId", service: jobService, label: "công việc" },
       ]
     ),
     applyController.createApply
@@ -36,14 +36,15 @@ const setRouter = (app) => {
     securityFilter.getUpdateFilter(
       applyService,
       ["createdDate", "cvId", "id", "jobId"],
-      []
+      [],
+      "cuộc ứng tuyển"
     ),
     applyController.updateApply
   );
   router.delete(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN", "JOB_SEEKER"]),
-    securityFilter.getDeleteFilter(applyService, [], null),
+    securityFilter.getDeleteFilter(applyService, [], null, "cuộc ứng tuyển"),
     applyController.deleteApply
   );
 

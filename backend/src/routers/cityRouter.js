@@ -12,19 +12,24 @@ const setRouter = (app) => {
   router.post(
     "/",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getCreateFilter(["name"], null, []),
+    securityFilter.getCreateFilter(["name"], null, [], "thành phố"),
     cityController.createCity
   );
   router.put(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getUpdateFilter(cityService, ["id"], []),
+    securityFilter.getUpdateFilter(cityService, ["id"], [], "thành phố"),
     cityController.updateCity
   );
   router.delete(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN"]),
-    securityFilter.getDeleteFilter(cityService, [districtService], "cityId"),
+    securityFilter.getDeleteFilter(
+      cityService,
+      [{ service: districtService, label: "quận" }],
+      "cityId",
+      "thành phố"
+    ),
     cityController.deleteCity
   );
 

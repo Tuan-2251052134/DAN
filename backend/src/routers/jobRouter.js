@@ -25,7 +25,8 @@ const setRouter = (app) => {
     securityFilter.getCreateFilter(
       ["name", "description", "payment", "userId", "typeId", "expiredDate"],
       ["BUSINESS"],
-      [{ key: "typeId", service: typeService }]
+      [{ key: "typeId", service: typeService }],
+      "công việc"
     ),
     jobController.createJob
   );
@@ -46,7 +47,8 @@ const setRouter = (app) => {
       [
         { key: "userId", service: userService },
         { key: "typeId", service: typeService },
-      ]
+      ],
+      "công việc"
     ),
     jobController.updateJob
   );

@@ -31,27 +31,27 @@ const getRolesFilter = (roles) => {
 
 //delete
 
-const getDeleteFilter = (service, services, key) => {
+const getDeleteFilter = (service, checkers, key, label) => {
   return async (req, res, next) => {
     const user = req.user;
     const id = req.params.id;
     const obj = await service.getOne({ id });
 
     if (!obj) {
-      throw new AppError("Không tìm thấy công việc", 400);
+      throw new AppError(`Không tìm thấy ${label}`, 400);
     }
 
     if (obj.userId !== user.id && user.role != "ADMIN") {
-      throw new AppError(
-        "Không thể thay đổi trên công việc không phải của mình",
-        400
-      );
+      throw new AppError(`Không thể xoá ${label} không phải của mình`, 400);
     }
 
-    for (let service of services) {
-      const refObj = await service.getOne({ [key]: obj.id });
+    for (let checker of checkers) {
+      const refObj = await check.service.getOne({ [key]: obj.id });
       if (refObj) {
-        throw new AppError(`Vẫn đang có ${refObj} thuộc công việc này`, 400);
+        throw new AppError(
+          `Vẫn đang có ${checker.label} thuộc đối tượng này`,
+          400
+        );
       }
     }
 
@@ -60,17 +60,14 @@ const getDeleteFilter = (service, services, key) => {
   };
 };
 
-const getRetriveFilter = (service) => {
+const getRetriveFilter = (service, label) => {
   return async (req, res, next) => {
     const user = req.user;
     const id = req.params.id;
     const obj = await service.getOne({ id });
 
     if (obj.userId !== user.id && user.role != "ADMIN") {
-      throw new AppError(
-        "Không thể thay đổi trên công việc không phải của mình",
-        403
-      );
+      throw new AppError(`Không thể xem ${label} không phải của mình`, 403);
     }
 
     req.obj = obj;
@@ -78,7 +75,7 @@ const getRetriveFilter = (service) => {
   };
 };
 
-const getCreateFilter = (keys, roles, foreignFields) => {
+const getCreateFilter = (keys, roles, foreignFields, label) => {
   return async (req, res, next) => {
     const body = req.body;
     const user = req.user;
@@ -108,7 +105,7 @@ const getCreateFilter = (keys, roles, foreignFields) => {
           }
         }
       } else if (keys.includes("userId") && user.id != body.userId) {
-        throw new AppError(`Không thể tạo đối tượng cho người khác`, 403);
+        throw new AppError(`Không thể ${label} cho người khác`, 403);
       }
     }
 
@@ -117,7 +114,7 @@ const getCreateFilter = (keys, roles, foreignFields) => {
         id: body[foreignField.key],
       });
       if (!refObj) {
-        throw new AppError(`Không tồn tại ${foreignField.key} này`, 400);
+        throw new AppError(`Không tồn tại ${foreignField.label} này`, 400);
       }
     }
 
@@ -126,26 +123,24 @@ const getCreateFilter = (keys, roles, foreignFields) => {
 };
 
 // update
-const getUpdateFilter = (service, constantFields, foreignFields) => {
+const getUpdateFilter = (service, constantFields, foreignFields, label) => {
   return async (req, res, next) => {
     const user = req.user;
     const file = req.file;
     const id = req.params.id;
     const body = req.body;
 
-    if (file) {
-      body.file = file;
-    }
+    body.file = file;
 
     const obj = await service.getOne({ id });
 
     if (!obj) {
-      throw new AppError("Không tìm thấy công việc", 400);
+      throw new AppError(`Không tìm thấy ${label} này`, 400);
     }
 
     if (obj.userId && obj.userId !== user.id && user.role != "ADMIN") {
       throw new AppError(
-        "Không thể thay đổi trên công việc không phải của mình",
+        `Không thể thay đổi trên ${label} không phải của mình`,
         400
       );
     }
@@ -169,7 +164,7 @@ const getUpdateFilter = (service, constantFields, foreignFields) => {
       const refObj = await service.getOne({ id: body[foreignField.key] });
 
       if (!refObj) {
-        throw new AppError(`Trường này ${foreignField.key} không tồn tại`, 400);
+        throw new AppError(`${foreignField.label} không tồn tại`, 400);
       }
     }
 

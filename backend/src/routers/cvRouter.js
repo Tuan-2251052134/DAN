@@ -16,7 +16,7 @@ const setRouter = (app) => {
   router.get(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN", "JOB_SEEKER"]),
-    securityFilter.getRetriveFilter(cvSerivce),
+    securityFilter.getRetriveFilter(cvSerivce, "cv"),
     cvController.getCV
   );
   router.post(
@@ -26,7 +26,8 @@ const setRouter = (app) => {
     securityFilter.getCreateFilter(
       ["name", "userId", "file"],
       ["JOB_SEEKER"],
-      []
+      [],
+      "cv"
     ),
     cvController.createCV
   );
@@ -34,16 +35,27 @@ const setRouter = (app) => {
     "/:id",
     multerFilter.single("cvFile"),
     securityFilter.getRolesFilter(["ADMIN", "JOB_SEEKER"]),
-    securityFilter.getUpdateFilter(cvSerivce, ["id", "userId"], {
-      key: "userId",
-      service: userSerivce,
-    }),
+    securityFilter.getUpdateFilter(
+      cvSerivce,
+      ["id", "userId"],
+      [
+        {
+          key: "userId",
+          service: userSerivce,
+        },
+      ],
+      "cv"
+    ),
     cvController.updateCV
   );
   router.delete(
     "/:id",
     securityFilter.getRolesFilter(["ADMIN", "JOB_SEEKER"]),
-    securityFilter.getDeleteFilter(cvSerivce, [applyService], "cvId"),
+    securityFilter.getDeleteFilter(
+      cvSerivce,
+      [{ service: applyService, label: "cụộc ứng tuyển" }],
+      "cvId"
+    ),
     cvController.deleteCV
   );
 

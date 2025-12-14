@@ -25,6 +25,7 @@ const login = async (req, res) => {
   if (!foundUser) {
     throw new AppError("Email hoặc mật khẩu không đúng", 400);
   }
+  console.log(foundUser)
 
   const passwordCheck = await securityUtil.checkPassword(
     user.password,

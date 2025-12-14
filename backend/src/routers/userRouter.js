@@ -15,11 +15,16 @@ const setRouter = (app) => {
     securityFilter.getCreateFilter(
       ["districtId", "address", "role", "password", "name", "email", "file"],
       null,
-      [{ key: "districtId", service: districtService }]
+      [{ key: "districtId", service: districtService }],
+      "nguời dùng"
     ),
     userController.register
   );
-  router.get("/", userController.getUsers);
+  router.get(
+    "/",
+    securityFilter.getRolesFilter(["ADMIN"]),
+    userController.getUsers
+  );
   router.get(
     "/:id",
     securityFilter.getRolesFilter(["ANY"]),
@@ -36,7 +41,8 @@ const setRouter = (app) => {
     securityFilter.getUpdateFilter(
       userService,
       ["email", "id"],
-      [{ key: "districtId", service: districtService }]
+      [{ key: "districtId", service: districtService }],
+      "người dùng"
     ),
     userController.updateUser
   );

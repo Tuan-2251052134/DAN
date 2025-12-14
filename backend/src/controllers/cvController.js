@@ -7,7 +7,7 @@ const getCVs = async (req, res) => {
   const user = req.user;
 
   let userId = user.role === "ADMIN" ? req.query.userId : user.id;
-  
+
   const cvs = await cvSerivce.getAll({ name, offset, userId });
   res.status(200).json({ data: cvs, errorMessage: null });
 };
@@ -18,9 +18,9 @@ const createCV = async (req, res) => {
   cv.url = url;
   delete cv.file;
 
-  cvSerivce.create({ cv });
+  const createdCv = await cvSerivce.create({ cv });
 
-  res.status(200).json({ data: cv, errorMessage: null });
+  res.status(200).json({ data: createdCv, errorMessage: null });
 };
 
 const getCV = async (req, res) => {

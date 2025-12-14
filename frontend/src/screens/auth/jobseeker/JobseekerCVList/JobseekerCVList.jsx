@@ -7,7 +7,8 @@ import "./styles.css";
 
 const JobseekerCVList = () => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const jobId = searchParams.get("jobId");
   const [list, setList] = useState([]);
   const [params, setParams] = useState({});
   const getData = async () => {
@@ -47,7 +48,7 @@ const JobseekerCVList = () => {
           tạo mới
         </button>
       </div>
-      <div className="d-flex flex-wrap mt-5">
+      <div className="d-flex flex-wrap mt-5 gap-5">
         {list.map((item) => (
           <div class="card" style={{ width: "18rem" }}>
             <iframe class="card-img-top" src={item.url} alt="Card image cap" />
@@ -56,7 +57,6 @@ const JobseekerCVList = () => {
               <a
                 class="btn btn-primary"
                 onClick={async () => {
-                  const jobId = searchParams.get("jobId");
                   if (jobId) {
                     const apply = { jobId: jobId, cvId: item.id };
                     try {
@@ -70,7 +70,7 @@ const JobseekerCVList = () => {
                   }
                 }}
               >
-                Xem chi tiết
+                {jobId ? "ứng tuyển" : "xem chi tiết"}
               </a>
             </div>
           </div>
