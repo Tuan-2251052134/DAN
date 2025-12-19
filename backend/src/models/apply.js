@@ -9,9 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Apply.belongsTo(models.CV, {
-        foreignKey: "cvId",
+        foreignKey: "jobSeekerId",
         as: "cv",
       });
+      Apply.belongsTo(models.User, {
+        foreignKey: "jobSeekerId",
+        as: "jobSeeker",
+      });
+
       Apply.belongsTo(models.Job, {
         foreignKey: "jobId",
         as: "job",
@@ -21,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
   Apply.init(
     {
       createdDate: DataTypes.DATE,
-      cvId: DataTypes.INTEGER,
+      jobSeekerId: DataTypes.INTEGER,
       jobId: DataTypes.INTEGER,
       status: DataTypes.STRING,
     },

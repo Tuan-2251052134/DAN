@@ -4,7 +4,7 @@ const request = require("supertest");
 describe("Test Express routes", () => {
   it("GET city", async () => {
     const res = await request(app).get("/api/city");
-    console.log(res.text)
+ 
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Hello World");
   });

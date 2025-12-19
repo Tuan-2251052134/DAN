@@ -10,6 +10,7 @@ const BusinessApplyList = () => {
   const getData = async () => {
     try {
       const res = await authApiUtil().get(`${end_point["apply"]}?jobId=${id}`);
+
       setApplies(res.data.data);
     } catch (ex) {
       handleError(ex);

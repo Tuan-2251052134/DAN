@@ -1,6 +1,7 @@
+const { Op } = require("sequelize");
 const { Apply, CV, User } = require("../models");
 
-const getOne = async ({ jobId, cvId, id }) => {
+const getOne = async ({ jobId, jobSeekerId, id }) => {
   const where = {};
 
   if (id) {
@@ -11,8 +12,8 @@ const getOne = async ({ jobId, cvId, id }) => {
     where.jobId = jobId;
   }
 
-  if (cvId) {
-    where.cvId = cvId;
+  if (jobSeekerId) {
+    where.jobSeekerId = jobSeekerId;
   }
 
   return await Apply.findOne({ where: where, raw: true });
@@ -39,13 +40,13 @@ const getDetailOne = async ({ id }) => {
     raw: true,
     include: [
       {
-        model: CV,
-        as: "cv",
+        model: User,
+        as: "jobSeeker",
+        attributes: ["email", "name", "avatar"],
         include: [
           {
-            model: User,
-            as: "user",
-            attributes: ["email", "name", "avatar"],
+            model: CV,
+            as: "cv",
           },
         ],
       },
@@ -65,4 +66,21 @@ const deleteOne = async ({ id }) => {
   return await Apply.destroy({ where: { id: id }, raw: true });
 };
 
-module.exports = { getOne, create, getAll, getDetailOne, update, deleteOne };
+const checkOne = async ({ jobId, userId }) => {
+  return await Apply.findOne({
+    where: {
+      [Op.and]: [{ jobId: jobId }, { userId: userId }],
+    },
+    raw: true,
+  });
+};
+
+module.exports = {
+  getOne,
+  create,
+  getAll,
+  getDetailOne,
+  update,
+  deleteOne,
+  checkOne,
+};

@@ -35,7 +35,7 @@ const getJobs = async (req, res) => {
   const name = req.query.name;
   const typeId = req.query.typeId;
   const offset = req.query.offset ?? 0;
-  const userId = req.query.userId;
+  const userId = req.query.jobId;
   let status;
   const user = req.user;
 

@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
         as: "jobs",
       });
+      User.hasOne(models.CV, {
+        foreignKey: "id",
+        as: "cv",
+      });
     }
   }
   User.init(

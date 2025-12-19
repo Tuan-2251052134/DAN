@@ -1,5 +1,5 @@
-const { raw } = require("mysql2");
-const { User, District, City } = require("../models");
+const AppError = require("../configs/AppError");
+const { User, District, City, CV, sequelize } = require("../models");
 const { Op } = require("sequelize");
 
 const register = async ({ user }) => {
@@ -80,11 +80,25 @@ const getDetailOne = async ({ id }) => {
           },
         ],
       },
+      {
+        model: CV,
+        as: "cv",
+      },
     ],
   });
 };
 
 const update = async ({ id, user }) => {
-  return await User.update(user, { where: { id: id }, raw: true });
+  const t = await sequelize.transaction();
+  try {
+    if (user.cv) {
+      const cv = { id: id, url: user.cv };
+      await CV.upsert(cv);
+    }
+    return await User.update(user, { where: { id: id }, raw: true });
+  } catch (ex) {
+    t.rollback();
+    throw new AppError("đã có lỗi xẩy ra", 500);
+  }
 };
 module.exports = { register, getOne, getAll, getDetailOne, update };

@@ -27,7 +27,7 @@ const Table = ({ list, setList, url, endPointKey, fields, searchFields }) => {
 
   const getList = async () => {
     setLoading(true);
-    console.log(params)
+
     try {
       let url = `${end_point[endPointKey]}?`;
       Object.keys(params).forEach((key) => {

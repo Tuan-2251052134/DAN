@@ -13,10 +13,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      cvId: {
+      jobSeekerId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "CVs",
+          model: "Users",
           key: "id",
         },
         allowNull: false,
@@ -32,7 +32,7 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
         allowNull: false,
-      }
+      },
     });
   },
   async down(queryInterface, Sequelize) {

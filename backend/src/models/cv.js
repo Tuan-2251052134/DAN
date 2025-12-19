@@ -9,14 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       CV.belongsTo(models.User, {
-        foreignKey: "userId",
+        foreignKey: "id",
         as: "user",
       });
-      CV.hasMany(models.Apply, {
-        foreignKey: "cvId",
-        as: "applys",
-      });
-      // define association here
     }
   }
   CV.init(
@@ -26,8 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         autoIncrement: true,
       },
-      name: DataTypes.STRING,
-      userId: DataTypes.INTEGER,
       url: DataTypes.STRING,
     },
     {

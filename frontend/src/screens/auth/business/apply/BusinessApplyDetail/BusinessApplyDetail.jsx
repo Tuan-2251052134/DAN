@@ -10,29 +10,30 @@ const BusinessApplyDetail = () => {
   const fields = [
     {
       type: "image",
-      key: "cv.user.avatar",
+      key: "jobSeeker.avatar",
       disabled: true,
     },
     {
       type: "text",
-      key: "cv.user.name",
+      key: "jobSeeker.name",
       label: "Tên ứng viên",
       disabled: true,
     },
     {
+      type: "datetime-local",
+      key: "createdDate",
+      label: "Thời gian tạo",
+      disabled: true,
+    },
+    {
       type: "email",
-      key: "cv.user.email",
+      key: "jobSeeker.email",
       label: "Email",
       disabled: true,
     },
     {
-      type: "text",
-      key: "cv.name",
-      disabled: true,
-    },
-    {
       type: "iframe",
-      key: "cv.url",
+      key: "jobSeeker.cv.url",
       label: "CV",
       disabled: true,
     },
@@ -43,14 +44,6 @@ const BusinessApplyDetail = () => {
       disabled: true,
     },
   ];
-
-  const getData = async () => {
-    try {
-      const res = await authApiUtil().get(end_point["apply-detail"](applyId));
-    } catch (ex) {
-      handleError(ex);
-    }
-  };
 
   const customSubmit = async (data) => {
     data.status = "PASS";
@@ -78,9 +71,6 @@ const BusinessApplyDetail = () => {
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
   return (
     <div className="mt-5 mb-5 d-flex justify-content-center">
       <Form

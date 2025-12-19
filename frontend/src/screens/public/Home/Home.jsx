@@ -39,7 +39,6 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log(params)
     getJobs();
   }, [params]);
 

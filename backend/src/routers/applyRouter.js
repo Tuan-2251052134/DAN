@@ -2,7 +2,7 @@ const { Router } = require("express");
 const securityFilter = require("../filters/securityFilter");
 const applyController = require("../controllers/applyController");
 const applyService = require("../services/applyService");
-const cvService = require("../services/cvService");
+const userService = require("../services/userService");
 const jobService = require("../services/jobService");
 
 const setRouter = (app) => {
@@ -11,10 +11,10 @@ const setRouter = (app) => {
     "/",
     securityFilter.getRolesFilter(["ADMIN", "JOB_SEEKER"]),
     securityFilter.getCreateFilter(
-      ["cvId", "jobId"],
+      ["userId", "jobId"],
       ["JOB_SEEKER"],
       [
-        { key: "cvId", service: cvService, label: "cv" },
+        { key: "userId", service: userService, label: "người dùng" },
         { key: "jobId", service: jobService, label: "công việc" },
       ]
     ),
@@ -35,8 +35,17 @@ const setRouter = (app) => {
     securityFilter.getRolesFilter(["ADMIN", "BUSINESS"]),
     securityFilter.getUpdateFilter(
       applyService,
-      ["createdDate", "cvId", "id", "jobId"],
-      [],
+      ["createdDate", "jobSeekerId", "id", "jobId"],
+      [
+        {
+          key: "jobSeekerId",
+          service: userService,
+        },
+        {
+          key: "jobId",
+          service: jobService,
+        },
+      ],
       "cuộc ứng tuyển"
     ),
     applyController.updateApply

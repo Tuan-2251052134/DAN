@@ -37,7 +37,7 @@ const BusinessJobList = () => {
         Object.keys(params).forEach((key) => {
           url += `&${key}=${params[key]}`;
         });
-        url += `&userId=${user?.id}`;
+        url += `&userId=${user.id}`;
 
         const res = await authApiUtil().get(url);
         setJobs(res.data.data);

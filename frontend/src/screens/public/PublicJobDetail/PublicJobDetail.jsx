@@ -1,9 +1,12 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Form from "../../../components/form/Form";
+import { useContext } from "react";
+import UserContext from "../../../context";
+import { authApiUtil, end_point } from "../../../utils/apiUtil";
 
 const PublicJobDetail = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const { user } = useContext(UserContext);
 
   const fields = [
     {
@@ -46,8 +49,9 @@ const PublicJobDetail = () => {
 
   const endPointKey = "job";
 
-  const customSubmit = () => {
-    navigate(`/jobseeker/cv?jobId=${id}`);
+  const customSubmit = async () => {
+    const apply = { userId: user.id, jobId: id };
+    const res = await authApiUtil().post(end_point["apply"], apply);
   };
 
   return (

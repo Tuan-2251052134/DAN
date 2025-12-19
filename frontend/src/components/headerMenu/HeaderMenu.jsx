@@ -30,14 +30,6 @@ const HeaderMenu = () => {
             },
           ]
         : []),
-      ...(user?.role === "JOB_SEEKER"
-        ? [
-            {
-              to: "/jobseeker/cv",
-              name: "Quản lý CV",
-            },
-          ]
-        : []),
     ],
     [user]
   );
@@ -73,7 +65,12 @@ const HeaderMenu = () => {
             {user ? (
               <>
                 <div className="d-flex justify-content-center align-items-center gap-3">
-                  {user?.name}
+                  <Link
+                    className="text-dark text-decoration-none"
+                    to="/profile"
+                  >
+                    {user?.name}
+                  </Link>
                   <img className="image" src={user?.avatar} />
                 </div>
                 <button

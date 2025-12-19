@@ -8,23 +8,15 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
-      },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      userId: {
-        type: Sequelize.INTEGER,
         references: {
           model: "Users",
           key: "id",
         },
-        allowNull: false,
       },
       url: {
         type: Sequelize.STRING,
         allowNull: false,
-      }
+      },
     });
   },
   async down(queryInterface, Sequelize) {

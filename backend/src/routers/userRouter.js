@@ -26,18 +26,38 @@ const setRouter = (app) => {
     userController.getUsers
   );
   router.get(
-    "/:id",
-    securityFilter.getRolesFilter(["ANY"]),
+    "/admin/:id",
+    securityFilter.getRolesFilter(["ADMIN"]),
     userController.getUser
   );
   router.get(
     "/profile",
     securityFilter.getRolesFilter(["BUSINESS", "JOB_SEEKER"]),
-    () => {}
+    userController.getUserProfile
   );
   router.put(
-    "/:id",
+    "/profile",
+    securityFilter.getRolesFilter(["BUSINESS", "JOB_SEEKER"]),
+    multerFilter.fields([
+      { name: "avatar", maxCount: 1 },
+      { name: "cv", maxCount: 1 },
+    ]),
+    securityFilter.getUpdateFilter(
+      userService,
+      ["id", "email"],
+      [{ key: "districtId", service: districtService }],
+      "bản thân",
+      true
+    ),
+    userController.updateUserProfile
+  );
+  router.put(
+    "/admin/:id",
     securityFilter.getRolesFilter(["ADMIN"]),
+    multerFilter.fields([
+      { name: "avatar", maxCount: 1 },
+      { name: "cv", maxCount: 1 },
+    ]),
     securityFilter.getUpdateFilter(
       userService,
       ["email", "id"],
@@ -46,10 +66,6 @@ const setRouter = (app) => {
     ),
     userController.updateUser
   );
-
-  router.delete("/:id", (req, res) => {
-    res.json("gg");
-  });
 
   app.use("/api/user", router);
 };

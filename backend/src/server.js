@@ -12,7 +12,6 @@ const userRouter = require("./routers/userRouter");
 const districtRouter = require("./routers/districtRouter");
 const cityRouter = require("./routers/cityRouter");
 const typeRouter = require("./routers/typeRouter");
-const cvRouter = require("./routers/cvRouter");
 const applyRouter = require("./routers/applyRouter");
 
 const app = express();
@@ -26,7 +25,6 @@ userRouter.setRouter(app);
 districtRouter.setRouter(app);
 cityRouter.setRouter(app);
 typeRouter.setRouter(app);
-cvRouter.setRouter(app);
 applyRouter.setRouter(app);
 
 errorConfig.setConfig(app);

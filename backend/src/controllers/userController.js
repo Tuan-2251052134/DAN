@@ -1,8 +1,6 @@
 const userSerivce = require("../services/userService");
-const districtService = require("../services/districtService");
 const securityUtil = require("../utils/securityUtil");
 const uploadFileUtil = require("../utils/uploadFileUtil");
-const checkUtil = require("../utils/checkUtil");
 const AppError = require("../configs/AppError");
 
 const login = async (req, res) => {
@@ -25,7 +23,6 @@ const login = async (req, res) => {
   if (!foundUser) {
     throw new AppError("Email hoặc mật khẩu không đúng", 400);
   }
-  console.log(foundUser)
 
   const passwordCheck = await securityUtil.checkPassword(
     user.password,
@@ -71,7 +68,7 @@ const getUsers = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const id = req.params.id;
+  const id = req.user.id;
   const currentUser = req.user;
 
   if (!currentUser) {
@@ -96,4 +93,35 @@ const updateUser = async (req, res) => {
   res.status(200).json({ data: updatedUser, errorMessage: null });
 };
 
-module.exports = { login, register, getUsers, getUser, updateUser };
+const updateUserProfile = async (req, res) => {
+  const files = req.files;
+  const body = req.body;
+  const user = req.user;
+
+  if (files.cv?.[0]) {
+    body.cv = await uploadFileUtil.uploadFile(files.cv[0].buffer);
+  }
+  if (files.avatar?.[0]) {
+    body.avatar = await uploadFileUtil.uploadFile(files.avatar[0].buffer);
+  }
+
+  const updatedUser = await userSerivce.update({ user: body, id: user.id });
+
+  res.json({ data: updatedUser, errorMessage: null });
+};
+
+const getUserProfile = async (req, res) => {
+  const id = req.user.id;
+  const detailData = await userSerivce.getDetailOne({ id });
+  res.json({ data: detailData, errorMessage: null });
+};
+
+module.exports = {
+  login,
+  register,
+  getUsers,
+  getUser,
+  updateUser,
+  updateUserProfile,
+  getUserProfile,
+};

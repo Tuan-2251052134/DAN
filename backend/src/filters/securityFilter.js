@@ -123,11 +123,17 @@ const getCreateFilter = (keys, roles, foreignFields, label) => {
 };
 
 // update
-const getUpdateFilter = (service, constantFields, foreignFields, label) => {
-  return async (req, res, next) => {
+const getUpdateFilter = (
+  service,
+  constantFields,
+  foreignFields,
+  label,
+  isProfile
+) => {
+  return async (req, _, next) => {
     const user = req.user;
     const file = req.file;
-    const id = req.params.id;
+    const id = isProfile ? user.id : req.params.id;
     const body = req.body;
 
     body.file = file;
@@ -161,7 +167,10 @@ const getUpdateFilter = (service, constantFields, foreignFields, label) => {
       if (!body[foreignField.key]) {
         throw new AppError(`Trường ${foreignField.key} bị trống`, 400);
       }
-      const refObj = await service.getOne({ id: body[foreignField.key] });
+
+      const refObj = await foreignField.service.getOne({
+        id: body[foreignField.key],
+      });
 
       if (!refObj) {
         throw new AppError(`${foreignField.label} không tồn tại`, 400);

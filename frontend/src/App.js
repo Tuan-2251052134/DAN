@@ -14,29 +14,26 @@ import UserContext from "./context";
 import userReducer from "./reducers/userReducer";
 import CityDetail from "./screens/auth/admin/city/CityDetail";
 import CityList from "./screens/auth/admin/city/CityList";
+import CVDetail from "./screens/auth/admin/cv/CVDetail";
+import CVList from "./screens/auth/admin/cv/CVList";
 import DistrictDetail from "./screens/auth/admin/district/DistrictDetail";
 import DistrictList from "./screens/auth/admin/district/DistrictList";
 import JobDetail from "./screens/auth/admin/job/JobDetail";
 import JobList from "./screens/auth/admin/job/JobList";
 import TypeDetail from "./screens/auth/admin/type/TypeDetail";
 import TypeList from "./screens/auth/admin/type/TypeList";
+import UserDetail from "./screens/auth/admin/user/UserDetail";
 import UserList from "./screens/auth/admin/user/UserList";
+import BusinessApplyDetail from "./screens/auth/business/apply/BusinessApplyDetail/BusinessApplyDetail";
+import BusinessApplyList from "./screens/auth/business/apply/BusinessApplyList/BusinessApplyList";
 import BusinessJobCreate from "./screens/auth/business/job/BusinessJobCreate/BusinessJobCreate";
 import BusinessJobDetail from "./screens/auth/business/job/BusinessJobDetail/BusinessJobDetail";
 import BusinessJobList from "./screens/auth/business/job/BusinessjobList/BusinessJobList";
-import JobseekerCVCreate from "./screens/auth/jobseeker/JobseekerCVCreate/JobseekerCVCreate";
-import JobseekerCVDetail from "./screens/auth/jobseeker/JobseekerCVDetail/JobseekerCVDetail";
-import JobseekerCVList from "./screens/auth/jobseeker/JobseekerCVList/JobseekerCVList";
 import Profile from "./screens/auth/Profile";
 import Home from "./screens/public/Home/Home";
 import Login from "./screens/public/Login";
 import PublicJobDetail from "./screens/public/PublicJobDetail/PublicJobDetail";
 import Register from "./screens/public/Register";
-import BusinessApplyList from "./screens/auth/business/apply/BusinessApplyList/BusinessApplyList";
-import BusinessApplyDetail from "./screens/auth/business/apply/BusinessApplyDetail/BusinessApplyDetail";
-import UserDetail from "./screens/auth/admin/user/UserDetail";
-import CVList from "./screens/auth/admin/cv/CVList";
-import CVDetail from "./screens/auth/admin/cv/CVDetail";
 
 const MenuProvider = ({ menuType }) => {
   if (menuType === "ADMIN") {
@@ -118,14 +115,6 @@ function App() {
             </Route>
 
             <Route path={""} element={<MenuProvider />}>
-              <Route path={"jobseeker"} element={<Outlet />}>
-                <Route path={"cv"} element={<Outlet />}>
-                  <Route path={""} element={<JobseekerCVList />} />
-                  <Route path={":id"} element={<JobseekerCVDetail />} />
-                  <Route path={"create"} element={<JobseekerCVCreate />} />
-                </Route>
-              </Route>
-
               <Route path={"business"} element={<Outlet />}>
                 <Route path={"job"} element={<Outlet />}>
                   <Route path={""} element={<BusinessJobList />} />
@@ -133,10 +122,7 @@ function App() {
                     <Route path={""} element={<BusinessJobDetail />} />
                     <Route path={"apply"} element={<Outlet />}>
                       <Route path={""} element={<BusinessApplyList />} />
-                      <Route
-                        path={":applyId"}
-                        element={<BusinessApplyDetail />}
-                      />
+                      <Route path={":applyId"} element={<BusinessApplyDetail />} />
                     </Route>
                   </Route>
                   <Route path={"create"} element={<BusinessJobCreate />} />

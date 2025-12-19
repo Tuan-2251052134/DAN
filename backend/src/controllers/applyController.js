@@ -1,6 +1,6 @@
 const AppError = require("../configs/AppError");
 const applyService = require("../services/applyService");
-const cvService = require("../services/cvService");
+const userService = require("../services/userService");
 const jobService = require("../services/jobService");
 
 const createApply = async (req, res) => {
@@ -10,6 +10,7 @@ const createApply = async (req, res) => {
   if (user.role === "JOB_SEEKER") {
     apply.createdDate = new Date();
     apply.status = "WAIT";
+    apply.userId = user.id;
   } else {
     if (!apply.createdDate) {
       apply.createdDate = new Date();
@@ -19,12 +20,13 @@ const createApply = async (req, res) => {
     }
   }
 
-  const cv = await cvService.getOne({ id: apply.cvId });
-  if (cv.userId !== user.id && user.role != "ADMIN") {
-    throw new AppError(
-      "Không được apply công việc không phải CV của mình",
-      403
-    );
+  const foundApply = await applyService.checkOne({
+    jobId: apply.jobId,
+    userId: apply.userId,
+  });
+
+  if (foundApply) {
+    throw new AppError("đã ứng tuyển rồi", 400);
   }
 
   const createdApply = await applyService.create({ apply });
@@ -61,12 +63,8 @@ const updateApply = async (req, res) => {
   const id = req.params.id;
   const apply = req.body;
 
-  if (
-    apply.status != "PASS" &&
-    apply.status != "WAIT" &&
-    apply.status != "FAIL"
-  ) {
-    throw new AppError(`Trạng thái này không hợp lệ ${apply.status}`, 400);
+  if (apply.status != "PASS" && apply.status != "FAIL") {
+    apply.status = "WAIT";
   }
 
   const updatedApply = await applyService.update({ apply, id });

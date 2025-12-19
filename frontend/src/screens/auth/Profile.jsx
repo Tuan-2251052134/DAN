@@ -1,52 +1,43 @@
-import { useState } from "react";
+import { useContext } from "react";
 import Form from "../../components/form/Form";
-import { end_point } from "../../utils/apiUtil";
+import UserContext from "../../context";
+import { authApiUtil, end_point } from "../../utils/apiUtil";
 
 const Profile = () => {
-  const [user, setUser] = useState({});
+  const { user } = useContext(UserContext);
   const fields = [
     {
-      label: "Avatar",
+      type: "number",
+      key: "id",
+      label: "Id",
+      disabled: true,
+    },
+    {
       type: "image",
-      value: user.avatar && URL.createObjectURL(user.avatar),
-      setValue: (value) => {
-        setUser({ ...user, avatar: value });
-      },
+      key: "avatar",
+      label: "Avatar",
     },
     {
-      label: "Tên",
-      value: user.name,
+      type: "app-select",
+      key: "district.city",
+      endPointKey: "city",
+      label: "Thành phố",
+    },
+    {
+      type: "app-select",
+      key: "district",
+      extraQueryKey: "cityId",
+      extraQueryValueKey: "district.cityId",
+      endPointKey: "district",
+      label: "Quận",
+    },
+    {
       type: "text",
-      setValue: (value) => {
-        setUser({ ...user, name: value });
-      },
-    },
-    {
-      label: "Email",
-      value: user.value,
-      type: "email",
-      setValue: (value) => {
-        setUser({ ...user, email: value });
-      },
-    },
-    {
-      label: "Mật khẩu",
-      value: user.password,
-      type: "password",
-      setValue: (value) => {
-        setUser({ ...user, password: value });
-      },
-    },
-    {
+      key: "address",
       label: "Địa chỉ",
-      value: user.address,
-      type: "text",
-      setValue: (value) => {
-        setUser({ ...user, address: value });
-      },
     },
     {
-      label: "vai trò",
+      label: "Vai trò",
       type: "select",
       data: [
         {
@@ -58,28 +49,62 @@ const Profile = () => {
           value: "JOB_SEEKER",
         },
       ],
-      setValue: (item) => {
-        setUser({ ...user, role: item.value });
-      },
+      key: "role",
     },
     {
-      label: "Thành phố",
-      type: "app-select",
-      mainUrl: end_point["city"],
-      setValue: (id) => {
-        setUser({ ...user, cityId: id });
-      },
+      label: "Tên",
+      type: "text",
+      key: "name",
     },
     {
-      label: "Quận",
-      type: "app-select",
-      mainUrl: `${end_point["district"]}/?cityId=${user.cityId}`,
-      setValue: (id) => {
-        setUser({ ...user, districtId: id });
-      },
+      label: "Email",
+      type: "email",
+      key: "email",
     },
+    {
+      label: "Mật khẩu",
+      type: "password",
+      key: "password",
+    },
+    ...(user?.role == "JOB_SEEKER"
+      ? [
+          {
+            label: "CV",
+            type: "iframe",
+            key: "cv.url",
+          },
+          {
+            label: "CV",
+            type: "file",
+            key: "cv",
+          },
+        ]
+      : []),
   ];
-  return <Form fields={fields} submit={() => {}} deleteHandler={() => {}} />;
+
+  const customSubmit = async (data) => {
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+    await authApiUtil().put(end_point["user-detail"]("profile"), formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
+
+  return (
+    <div className="d-flex justify-content-center mt-3 mb-3">
+      <Form
+        endPointKey={"user"}
+        id={"profile"}
+        fields={fields}
+        customSubmit={customSubmit}
+        deleteHandler={() => {}}
+      />
+    </div>
+  );
 };
 
 export default Profile;
