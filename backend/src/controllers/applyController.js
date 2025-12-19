@@ -1,6 +1,5 @@
 const AppError = require("../configs/AppError");
 const applyService = require("../services/applyService");
-const userService = require("../services/userService");
 const jobService = require("../services/jobService");
 
 const createApply = async (req, res) => {
@@ -37,6 +36,7 @@ const createApply = async (req, res) => {
 const getApplys = async (req, res) => {
   const jobId = req.query.jobId;
   const user = req.user;
+  const jobSeeker = req.query.jobSeeker;
 
   const job = await jobService.getOne({ id: jobId });
   if (!job) {
@@ -47,7 +47,10 @@ const getApplys = async (req, res) => {
     throw new AppError("Không được xem danh sách công việc này", 403);
   }
 
-  const applys = await applyService.getAll({ jobId });
+  const applys = await applyService.getAll({
+    jobId,
+    jobSeekerId: jobSeeker && user.id,
+  });
   res.status(200).json({ data: applys, errorMessage: null });
 };
 

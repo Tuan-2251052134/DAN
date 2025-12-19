@@ -19,7 +19,14 @@ const getOne = async ({ jobId, jobSeekerId, id }) => {
   return await Apply.findOne({ where: where, raw: true });
 };
 
-const getAll = async ({ jobId }) => {
+const getAll = async ({ jobId, jobSeekerId }) => {
+  const where = {};
+  if (jobId) {
+    where.jobId = jobId;
+  }
+  if (jobSeekerId) {
+    where.jobSeekerId = jobSeekerId;
+  }
   return await Apply.findAll({
     where: { jobId: jobId },
     include: [
