@@ -71,7 +71,15 @@ const getAll = async ({ name, typeId, offset, userId, status }) => {
     where.status = status;
   }
 
+  where.expiredDate > new Date();
+
   return await Job.findAll({
+    include: [
+      {
+        model: Type,
+        as: "type",
+      },
+    ],
     where: where,
     limit: parseInt(process.env.QUERY_LIMIT),
     offset: offset * parseInt(process.env.QUERY_LIMIT),

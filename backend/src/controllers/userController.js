@@ -116,6 +116,7 @@ const getUserProfile = async (req, res) => {
   res.json({ data: detailData, errorMessage: null });
 };
 
+
 module.exports = {
   login,
   register,

@@ -101,4 +101,16 @@ const update = async ({ id, user }) => {
     throw new AppError("đã có lỗi xẩy ra", 500);
   }
 };
-module.exports = { register, getOne, getAll, getDetailOne, update };
+
+const checkCVExist = async ({ id }) => {
+  return await CV.findOne({ id: id, raw: true });
+};
+
+module.exports = {
+  register,
+  getOne,
+  getAll,
+  getDetailOne,
+  update,
+  checkCVExist,
+};

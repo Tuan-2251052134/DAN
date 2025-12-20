@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Apply, CV, User } = require("../models");
+const { Apply, CV, User, Job, Type } = require("../models");
 
 const getOne = async ({ jobId, jobSeekerId, id }) => {
   const where = {};
@@ -19,22 +19,38 @@ const getOne = async ({ jobId, jobSeekerId, id }) => {
   return await Apply.findOne({ where: where, raw: true });
 };
 
-const getAll = async ({ jobId, jobSeekerId }) => {
+const getAll = async ({ jobId, jobSeekerId, offset }) => {
   const where = {};
   if (jobId) {
     where.jobId = jobId;
   }
+
   if (jobSeekerId) {
     where.jobSeekerId = jobSeekerId;
   }
+
   return await Apply.findAll({
-    where: { jobId: jobId },
+    where: where,
     include: [
-      {
-        model: CV,
-        as: "cv",
-      },
+      jobSeekerId
+        ? {
+            model: Job,
+            as: "job",
+            include: [
+              {
+                model: Type,
+                as: "type",
+              },
+            ],
+            order: [["createdDate", "DESC"]],
+          }
+        : {
+            model: CV,
+            as: "cv",
+          },
     ],
+    offset: parseInt(offset) * parseInt(process.env.QUERY_LIMIT),
+    limit: parseInt(process.env.QUERY_LIMIT),
     raw: true,
   });
 };
@@ -73,10 +89,10 @@ const deleteOne = async ({ id }) => {
   return await Apply.destroy({ where: { id: id }, raw: true });
 };
 
-const checkOne = async ({ jobId, userId }) => {
+const checkOne = async ({ jobId, jobSeekerId }) => {
   return await Apply.findOne({
     where: {
-      [Op.and]: [{ jobId: jobId }, { userId: userId }],
+      [Op.and]: [{ jobId: jobId }, { jobSeekerId: jobSeekerId }],
     },
     raw: true,
   });

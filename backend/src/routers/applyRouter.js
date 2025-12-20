@@ -22,7 +22,7 @@ const setRouter = (app) => {
   );
   router.get(
     "/",
-    securityFilter.getRolesFilter(["ADMIN", "BUSINESS"]),
+    securityFilter.getRolesFilter(["ADMIN", "BUSINESS", "JOB_SEEKER"]),
     applyController.getApplys
   );
   router.get(

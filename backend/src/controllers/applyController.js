@@ -1,5 +1,6 @@
 const AppError = require("../configs/AppError");
 const applyService = require("../services/applyService");
+const userService = require("../services/userService");
 const jobService = require("../services/jobService");
 
 const createApply = async (req, res) => {
@@ -9,7 +10,7 @@ const createApply = async (req, res) => {
   if (user.role === "JOB_SEEKER") {
     apply.createdDate = new Date();
     apply.status = "WAIT";
-    apply.userId = user.id;
+    apply.jobSeekerId = user.id;
   } else {
     if (!apply.createdDate) {
       apply.createdDate = new Date();
@@ -19,9 +20,14 @@ const createApply = async (req, res) => {
     }
   }
 
+  const cv = userService.checkCVExist({ id: apply.userId });
+  if (!cv) {
+    throw new AppError("Chưa có CV", 400);
+  }
+
   const foundApply = await applyService.checkOne({
     jobId: apply.jobId,
-    userId: apply.userId,
+    jobSeekerId: apply.jobSeekerId,
   });
 
   if (foundApply) {
@@ -36,20 +42,21 @@ const createApply = async (req, res) => {
 const getApplys = async (req, res) => {
   const jobId = req.query.jobId;
   const user = req.user;
-  const jobSeeker = req.query.jobSeeker;
+  const offset = req.query.offset ?? 0;
 
   const job = await jobService.getOne({ id: jobId });
   if (!job) {
     throw new AppError("Không tồn tại công việc này", 400);
   }
 
-  if (job.userId != user.id && user.role != "ADMIN") {
+  if (job.userId != user.id && user.role == "BUSINESS") {
     throw new AppError("Không được xem danh sách công việc này", 403);
   }
 
   const applys = await applyService.getAll({
     jobId,
-    jobSeekerId: jobSeeker && user.id,
+    jobSeekerId: user.role === "JOB_SEEKER" && user.id,
+    offset,
   });
   res.status(200).json({ data: applys, errorMessage: null });
 };
