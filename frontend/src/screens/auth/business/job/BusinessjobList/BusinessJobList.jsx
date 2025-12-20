@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import Form from "../../../../../components/form/Form";
 import { apiUtil, authApiUtil, end_point } from "../../../../../utils/apiUtil";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import "./styles.css";
 import { handleError } from "../../../../../utils/errorAlertUtil";
 import UserContext from "../../../../../context";
 import SearchBar from "../../../../../components/searchBar/SearchBar";
+import JobCard from "../../../../../components/jobCard/JobCard";
 
 const BusinessJobList = () => {
   const [jobs, setJobs] = useState([]);
@@ -60,21 +61,14 @@ const BusinessJobList = () => {
         </button>
       </div>
       {jobs.map((job) => (
-        <div class="card mt-2">
-          <div class="card-header">{job.typeId}</div>
-          <div class="card-body">
-            <h5 class="card-title">{job.name}</h5>
-            <p class="card-text">ngày tạo: {job.createdDate}</p>
-            <p class="card-text">ngày hết hạn: {job.expiredDate}</p>
-            <p class="card-text">trạng thái: {job.status}</p>
-            <button
-              onClick={() => navigate(`/business/job/${job.id}`)}
-              class="btn btn-primary"
-            >
-              Xem chi tiết
-            </button>
-          </div>
-        </div>
+        <JobCard
+          typeName={job["type.name"]}
+          name={job.name}
+          createdDate={job.createdDate}
+          expiredDate={job.expiredDate}
+          id={job.id}
+          status={job.status}
+        />
       ))}
     </div>
   );

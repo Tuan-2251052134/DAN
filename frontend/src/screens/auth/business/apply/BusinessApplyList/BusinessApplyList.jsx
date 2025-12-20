@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { authApiUtil, end_point } from "../../../../../utils/apiUtil";
 import { handleError } from "../../../../../utils/errorAlertUtil";
 
@@ -10,7 +10,7 @@ const BusinessApplyList = () => {
   const getData = async () => {
     try {
       const res = await authApiUtil().get(`${end_point["apply"]}?jobId=${id}`);
-
+      console.log(res.data.data);
       setApplies(res.data.data);
     } catch (ex) {
       handleError(ex);

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import Form from "../../../../../components/form/Form";
 import { useContext } from "react";
 import UserContext from "../../../../../context";

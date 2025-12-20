@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import { apiUtil, end_point } from "../../utils/apiUtil";
 import { handleError } from "../../utils/errorAlertUtil";

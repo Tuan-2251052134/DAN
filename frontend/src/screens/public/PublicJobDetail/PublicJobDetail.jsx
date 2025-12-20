@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import Form from "../../../components/form/Form";
 import { useContext } from "react";
 import UserContext from "../../../context";
@@ -50,8 +50,12 @@ const PublicJobDetail = () => {
   const endPointKey = "job";
 
   const customSubmit = async () => {
-    const apply = { userId: user.id, jobId: id };
-    const res = await authApiUtil().post(end_point["apply"], apply);
+    if (user) {
+      const apply = { userId: user.id, jobId: id };
+      const res = await authApiUtil().post(end_point["apply"], apply);
+    } else {
+      alert("chưa đăng nhập");
+    }
   };
 
   return (

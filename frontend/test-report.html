@@ -1,0 +1,435 @@
+<html><head><meta charset="utf-8"/><title>Test Report</title><style type="text/css">:root {
+  --text-primary: #111;
+  --text-secondary: #4f4f4f;
+  --success: #006633;
+  --success-bright: #80ffbf;
+  --danger: #cc071e;
+  --danger-bright: #fbdfe0;
+  --warning: #995c00;
+  --warning-bright: #ffeea8;
+  --panel: #eee;
+  --border: #949494;
+  --disabled: #6b6b6b;
+}
+
+html,
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  color: var(--text-primary);
+}
+body {
+  padding: 2rem 1rem;
+}
+.jesthtml-content {
+  margin: 0 auto;
+  max-width: 70rem;
+}
+header {
+  display: flex;
+  align-items: center;
+}
+#title {
+  margin: 0;
+  flex-grow: 1;
+}
+#logo {
+  height: 4rem;
+}
+#timestamp {
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+#metadata-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.additional-information-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+/** SUMMARY */
+#summary {
+  color: var(--text-primary);
+  display: flex;
+  font-family: monospace;
+  font-size: 1rem;
+}
+#summary > div {
+  margin-right: 0.5rem;
+  background: var(--panel);
+  padding: 1rem;
+  min-width: 15rem;
+}
+#summary > div:last-child {
+  margin-right: 0;
+}
+@media only screen and (max-width: 720px) {
+  #summary {
+    flex-direction: column;
+  }
+  #summary > div {
+    margin-right: 0;
+    margin-top: 1rem;
+  }
+  #summary > div:first-child {
+    margin-top: 0;
+  }
+}
+
+.summary-total {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.summary-passed {
+  color: var(--success);
+  border-left: 0.4rem solid var(--success);
+  padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+.summary-failed,
+.summary-obsolete-snapshots {
+  color: var(--danger);
+  border-left: 0.4rem solid var(--danger);
+  padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+.summary-pending {
+  color: var(--warning);
+  border-left: 0.4rem solid var(--warning);
+  padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+.summary-empty {
+  color: var(--disabled);
+  border-left: 0.4rem solid var(--disabled);
+  margin-bottom: 0.15rem;
+}
+
+.test-result {
+  padding: 1rem;
+  margin-bottom: 0.25rem;
+}
+.test-result:last-child {
+  border: 0;
+}
+.test-result.passed {
+  background-color: var(--success-bright);
+  color: var(--success);
+}
+.test-result.failed {
+  background-color: var(--danger-bright);
+  color: var(--danger);
+}
+.test-result.pending {
+  background-color: var(--warning-bright);
+  color: var(--warning);
+}
+
+.test-info {
+  display: flex;
+  justify-content: space-between;
+}
+.test-suitename {
+  width: 20%;
+  text-align: left;
+  font-weight: bold;
+  word-break: break-word;
+}
+.test-title {
+  width: 40%;
+  text-align: left;
+  font-style: italic;
+}
+.test-status {
+  width: 20%;
+  text-align: right;
+}
+.test-duration {
+  width: 10%;
+  text-align: right;
+  font-size: 0.85rem;
+}
+
+.failureMessages {
+  padding: 0 1rem;
+  margin-top: 1rem;
+  border-top: 1px dashed var(--danger);
+}
+.failureMessages.suiteFailure {
+  border-top: none;
+}
+.failureMsg {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.suite-container {
+  margin-bottom: 1rem;
+}
+.suite-info {
+  padding: 1rem;
+  background-color: var(--panel);
+  color: var(--text-secondary);
+  border: 0.15rem solid;
+  border-color: var(--panel);
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+.suite-info:hover {
+  border-color: var(--border);
+  cursor: pointer;
+}
+.suite-info .suite-path {
+  word-break: break-all;
+  flex-grow: 1;
+  font-family: monospace;
+  font-size: 1rem;
+}
+.suite-info .suite-time {
+  margin-left: 1rem;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.85rem;
+}
+.suite-info .suite-time.warn {
+  background-color: var(--danger);
+  color: #fff;
+}
+.suite-info:before {
+  content: "\2303";
+  display: inline-block;
+  margin-right: 1rem;
+  transform: rotate(180deg) translateY(0.15rem);
+}
+.suite-container[open] .suite-info:before {
+  transform: rotate(0deg) translateY(0.15rem);
+}
+
+/* CONSOLE LOGS */
+.suite-consolelog {
+  margin-bottom: 0.25rem;
+  padding: 1rem;
+  background-color: var(--panel);
+}
+.suite-consolelog-header {
+  font-weight: bold;
+}
+.suite-consolelog-item {
+  padding: 0.5rem;
+}
+.suite-consolelog-item pre {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.suite-consolelog-item-origin {
+  color: var(--text-secondary);
+  font-weight: bold;
+}
+.suite-consolelog-item-message {
+  color: var(--text-primary);
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+
+/* OBSOLETE SNAPSHOTS */
+.suite-obsolete-snapshots {
+  margin-bottom: 0.25rem;
+  padding: 1rem;
+  background-color: var(--danger-bright);
+  color: var(--danger);
+}
+.suite-obsolete-snapshots-header {
+  font-weight: bold;
+}
+.suite-obsolete-snapshots-item {
+  padding: 0.5rem;
+}
+.suite-obsolete-snapshots-item pre {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.suite-obsolete-snapshots-item-message {
+  color: var(--text-primary);
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+</style></head><body><main class="jesthtml-content"><header><h1 id="title">Test Report</h1></header><section id="metadata-container"><div id="timestamp">Started: 2025-12-21 00:51:33</div><div id="summary"><div id="suite-summary"><div class="summary-total">Suites (8)</div><div class="summary-passed ">7 passed</div><div class="summary-failed ">1 failed</div><div class="summary-pending  summary-empty">0 pending</div></div><div id="test-summary"><div class="summary-total">Tests (26)</div><div class="summary-passed ">24 passed</div><div class="summary-failed ">2 failed</div><div class="summary-pending  summary-empty">0 pending</div></div></div></section><details id="suite-1" class="suite-container" open=""><summary class="suite-info"><div class="suite-path">/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/AppSelect.test.jsx</div><div class="suite-time">2.156s</div></summary><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">AppSelect Component</div><div class="test-title">render AppSelect và load dữ liệu từ API khi mở menu</div><div class="test-status">passed</div><div class="test-duration">0.274s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">AppSelect Component</div><div class="test-title">gọi setValue khi chọn option</div><div class="test-status">passed</div><div class="test-duration">0.1s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">AppSelect Component</div><div class="test-title">gọi handleError khi API lỗi</div><div class="test-status">passed</div><div class="test-duration">0.117s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">AppSelect Component</div><div class="test-title">thay đổi input keyword và gọi API</div><div class="test-status">passed</div><div class="test-duration">0.122s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">AppSelect Component</div><div class="test-title">scroll to bottom gọi API load thêm</div><div class="test-status">passed</div><div class="test-duration">0.048s</div></div></div></div></details><details id="suite-2" class="suite-container" open=""><summary class="suite-info"><div class="suite-path">/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/Form.test.jsx</div><div class="suite-time">0.233s</div></summary><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">Form Component</div><div class="test-title">renders form fields correctly</div><div class="test-status">passed</div><div class="test-duration">0.019s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">Form Component</div><div class="test-title">submits the form without errors</div><div class="test-status">passed</div><div class="test-duration">0.086s</div></div></div></div><div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at console.error (/Users/tuan/Documents/Tuan/DAN/frontend/src/setupTests.js:29:19)
+    at updateProperties (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:20854:22)
+    at commitUpdate (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:22168:7)
+    at runWithFiberInDEV (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+    at commitHostUpdate (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:13601:9)
+    at commitMutationEffectsOnFiber (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14842:13)
+    at recursivelyTraverseMutationEffects (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14576:11)
+    at commitMutationEffectsOnFiber (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14821:11)
+    at recursivelyTraverseMutationEffects (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14576:11)
+    at commitMutationEffectsOnFiber (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:15102:11)
+    at recursivelyTraverseMutationEffects (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14576:11)
+    at commitMutationEffectsOnFiber (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:15102:11)
+    at recursivelyTraverseMutationEffects (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14576:11)
+    at commitMutationEffectsOnFiber (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14821:11)
+    at recursivelyTraverseMutationEffects (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14576:11)
+    at commitMutationEffectsOnFiber (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14591:11)
+    at recursivelyTraverseMutationEffects (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14576:11)
+    at commitMutationEffectsOnFiber (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:14883:11)
+    at flushMutationEffects (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:17979:13)
+    at commitRoot (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:17953:9)
+    at performWorkOnRoot (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:16667:15)
+    at performSyncWorkOnRoot (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:18972:7)
+    at flushSyncWorkAcrossRoots_impl (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:18814:21)
+    at flushSyncWork$1 (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:16898:12)
+    at batchedUpdates$1 (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:3263:14)
+    at dispatchEventForPluginEventSystem (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:19320:7)
+    at dispatchEvent (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:23585:11)
+    at dispatchDiscreteEvent (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react-dom/cjs/react-dom-client.development.js:23553:11)
+    at HTMLDivElement.callTheUserObjectsOperation (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
+    at innerInvokeEventListeners (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:338:25)
+    at invokeEventListeners (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:274:3)
+    at HTMLInputElementImpl._dispatch (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:221:9)
+    at HTMLInputElementImpl.dispatchEvent (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:94:17)
+    at HTMLInputElement.dispatchEvent (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:231:34)
+    at /Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/dom/dist/events.js:19:20
+    at /Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/react/dist/pure.js:108:16
+    at /Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/react/dist/act-compat.js:48:24
+    at Object.&lt;anonymous&gt;.process.env.NODE_ENV.exports.act (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/react/cjs/react.development.js:814:22)
+    at /Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at Object.eventWrapper (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/react/dist/pure.js:107:28)
+    at fireEvent (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/dom/dist/events.js:12:35)
+    at Function.fireEvent.&lt;computed&gt; [as change] (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/dom/dist/events.js:110:36)
+    at Function.change (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/react/dist/fire-event.js:15:52)
+    at Object.&lt;anonymous&gt; (/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/Form.test.jsx:50:15)
+    at Promise.then.completed (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jest-circus/build/run.js:218:40)</pre><pre class="suite-consolelog-item-message">A component is changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled input element for the lifetime of the component. More info: https://react.dev/link/controlled-components</pre></div></div></details><details id="suite-3" class="suite-container" open=""><summary class="suite-info"><div class="suite-path">/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/Menu.test.jsx</div><div class="suite-time">0.181s</div></summary><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">Menu Component</div><div class="test-title">renders all menu items</div><div class="test-status">passed</div><div class="test-duration">0.016s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">Menu Component</div><div class="test-title">highlights active link based on pathname</div><div class="test-status">passed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">Menu Component</div><div class="test-title">displays user info from context</div><div class="test-status">passed</div><div class="test-duration">0.025s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">Menu Component</div><div class="test-title">renders children correctly</div><div class="test-status">passed</div><div class="test-duration">0.013s</div></div></div></div></details><details id="suite-4" class="suite-container" open=""><summary class="suite-info"><div class="suite-path">/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/SearchBar.test.jsx</div><div class="suite-time">0.149s</div></summary><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">SearchBar component</div><div class="test-title">renders text input and AppSelect</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">SearchBar component</div><div class="test-title">updates params when typing in text input</div><div class="test-status">passed</div><div class="test-duration">0.006s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">SearchBar component</div><div class="test-title">updates params when selecting AppSelect value</div><div class="test-status">passed</div><div class="test-duration">0.005s</div></div></div></div></details><details id="suite-5" class="suite-container" open=""><summary class="suite-info"><div class="suite-path">/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/HeaderMenu.test.jsx</div><div class="suite-time">0.205s</div></summary><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">HeaderMenu Component</div><div class="test-title">shows login/register buttons when user is not logged in</div><div class="test-status">passed</div><div class="test-duration">0.012s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">HeaderMenu Component</div><div class="test-title">shows user info and logout button when user is logged in</div><div class="test-status">passed</div><div class="test-duration">0.023s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">HeaderMenu Component</div><div class="test-title">calls setUser with LOGOUT when logout button is clicked</div><div class="test-status">passed</div><div class="test-duration">0.016s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">HeaderMenu Component</div><div class="test-title">renders BUSINESS routes when user role is BUSINESS</div><div class="test-status">passed</div><div class="test-duration">0.006s</div></div></div></div></details><details id="suite-6" class="suite-container" open=""><summary class="suite-info"><div class="suite-path">/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/Table.test.jsx</div><div class="suite-time">3.181s</div></summary><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">Table component (NO Router)</div><div class="test-title">renders rows correctly</div><div class="test-status">passed</div><div class="test-duration">0.069s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">Table component (NO Router)</div><div class="test-title">click Chi tiết navigates correctly</div><div class="test-status">failed</div><div class="test-duration">0.046s</div></div><div class="failureMessages"> <pre class="failureMsg">Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+Expected: "/users/1"
+
+Number of calls: 0
+    at Object.&lt;anonymous&gt; (/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/Table.test.jsx:97:26)</pre></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">Table component (NO Router)</div><div class="test-title">click Xoá calls delete API and updates list</div><div class="test-status">failed</div><div class="test-duration">1.018s</div></div><div class="failureMessages"> <pre class="failureMsg">Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+Expected: "/api/users/1"
+
+Number of calls: 0
+
+Ignored nodes: comments, script, style
+&lt;html&gt;
+  &lt;head /&gt;
+  &lt;body&gt;
+    &lt;div&gt;
+      &lt;div&gt;
+        SearchBar
+      &lt;/div&gt;
+      &lt;div
+        class="table-responsive w-100"
+      &gt;
+        &lt;table
+          class="table table-hover"
+        &gt;
+          &lt;thead&gt;
+            &lt;tr&gt;
+              &lt;th
+                scope="col"
+              &gt;
+                Tên
+              &lt;/th&gt;
+              &lt;th
+                scope="col"
+              &gt;
+                Email
+              &lt;/th&gt;
+              &lt;th&gt;
+                Chi tiết
+              &lt;/th&gt;
+              &lt;th&gt;
+                Xoá
+              &lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+            &lt;tr&gt;
+              &lt;td&gt;
+                Alice
+              &lt;/td&gt;
+              &lt;td&gt;
+                alice@test.com
+              &lt;/td&gt;
+              &lt;td&gt;
+                &lt;button
+                  class="btn btn-primary"
+                &gt;
+                  Chi tiết
+                &lt;/button&gt;
+              &lt;/td&gt;
+              &lt;td&gt;
+                &lt;button
+                  class="btn btn-danger"
+                &gt;
+                  Xoá
+                &lt;/button&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+              &lt;td&gt;
+                Bob
+              &lt;/td&gt;
+              &lt;td&gt;
+                bob@test.com
+              &lt;/td&gt;
+              &lt;td&gt;
+                &lt;button
+                  class="btn btn-primary"
+                &gt;
+                  Chi tiết
+                &lt;/button&gt;
+              &lt;/td&gt;
+              &lt;td&gt;
+                &lt;button
+                  class="btn btn-danger"
+                &gt;
+                  Xoá
+                &lt;/button&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+        &lt;div
+          class="d-flex gap-3 justify-content-center"
+        &gt;
+          &lt;button
+            class="btn btn-primary"
+          &gt;
+            &amp;gt;
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+    at /Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/Table.test.jsx:115:26
+    at runWithExpensiveErrorDiagnosticsDisabled (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/dom/dist/config.js:47:12)
+    at checkCallback (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/dom/dist/wait-for.js:124:77)
+    at checkRealTimersCallback (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/@testing-library/dom/dist/wait-for.js:118:16)
+    at Timeout.task [as _onTimeout] (/Users/tuan/Documents/Tuan/DAN/frontend/node_modules/jsdom/lib/jsdom/browser/Window.js:516:19)
+    at listOnTimeout (node:internal/timers:588:17)
+    at processTimers (node:internal/timers:523:7)</pre></div></div></div></details><details id="suite-7" class="suite-container" open=""><summary class="suite-info"><div class="suite-path">/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/JobCard.test.jsx</div><div class="suite-time">0.378s</div></summary><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">JobCard Component</div><div class="test-title">renders job details correctly</div><div class="test-status">passed</div><div class="test-duration">0.019s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">JobCard Component</div><div class="test-title">navigates to custom url when button clicked</div><div class="test-status">passed</div><div class="test-duration">0.038s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">JobCard Component</div><div class="test-title">navigates to default url when url prop is not provided</div><div class="test-status">passed</div><div class="test-duration">0.01s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">JobCard Component</div><div class="test-title">does not render status when status prop is undefined</div><div class="test-status">passed</div><div class="test-duration">0.019s</div></div></div></div></details><details id="suite-8" class="suite-container" open=""><summary class="suite-info"><div class="suite-path">/Users/tuan/Documents/Tuan/DAN/frontend/src/test/components/Loading.test.jsx</div><div class="suite-time">0.246s</div></summary><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">Loading Component</div><div class="test-title">renders the loading spinner</div><div class="test-status">passed</div><div class="test-duration">0.044s</div></div></div></div></details></main></body></html>

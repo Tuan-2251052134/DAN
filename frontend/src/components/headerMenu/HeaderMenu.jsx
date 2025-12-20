@@ -1,6 +1,6 @@
-import { Link, useMatch, useNavigate } from "react-router-dom";
+import { useContext, useMemo } from "react";
+import { Link, useNavigate } from "react-router";
 import UserContext from "../../context";
-import { useContext, useEffect, useMemo } from "react";
 import "./styles.css";
 
 const HeaderMenu = () => {
@@ -35,13 +35,13 @@ const HeaderMenu = () => {
   );
 
   return (
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <Link class="navbar-brand" to="/home">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div className="container-fluid">
+        <Link className="navbar-brand" to="/home">
           Website
         </Link>
         <button
-          class="navbar-toggler"
+          className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
@@ -49,19 +49,19 @@ const HeaderMenu = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             {routes.map((item, index) => (
-              <li class="nav-item" key={index}>
-                <Link class="nav-link active" aria-current="page" to={item.to}>
+              <li className="nav-item" key={index}>
+                <Link className="nav-link active" aria-current="page" to={item.to}>
                   {item.name}
                 </Link>
               </li>
             ))}
           </ul>
-          <div class="d-flex gap-2">
+          <div className="d-flex gap-2">
             {user ? (
               <>
                 <div className="d-flex justify-content-center align-items-center gap-3">
@@ -74,7 +74,7 @@ const HeaderMenu = () => {
                   <img className="image" src={user?.avatar} />
                 </div>
                 <button
-                  class="btn btn-outline-danger"
+                  className="btn btn-outline-danger"
                   type="button"
                   onClick={logout}
                 >
@@ -84,14 +84,14 @@ const HeaderMenu = () => {
             ) : (
               <>
                 <button
-                  class="btn btn-outline-primary"
+                  className="btn btn-outline-primary"
                   type="button"
                   onClick={navigateToLogin}
                 >
                   đăng nhập
                 </button>
                 <button
-                  class="btn btn-outline-success"
+                  className="btn btn-outline-success"
                   type="button"
                   onClick={navigateToRegister}
                 >

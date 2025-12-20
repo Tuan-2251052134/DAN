@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import SearchBar from "../../../components/searchBar/SearchBar";
 import { apiUtil, end_point } from "../../../utils/apiUtil";
 import { handleError } from "../../../utils/errorAlertUtil";
 import "./styles.css";
+import JobCard from "../../../components/jobCard/JobCard";
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
@@ -32,6 +33,7 @@ const Home = () => {
       url += `&status=PASS`;
 
       const res = await apiUtil.get(url);
+      console.log(res.data.data);
       setJobs(res.data.data);
     } catch (ex) {
       handleError(ex);
@@ -48,20 +50,14 @@ const Home = () => {
         <SearchBar fields={fields} setParentParams={setParams} />
       </div>
       {jobs.map((job) => (
-        <div class="card mt-2">
-          <div class="card-header">{job.typeId}</div>
-          <div class="card-body">
-            <h5 class="card-title">{job.name}</h5>
-            <p class="card-text">ngày tạo: {job.createdDate}</p>
-            <p class="card-text">ngày hết hạn: {job.expiredDate}</p>
-            <button
-              onClick={() => navigate(`/job/${job.id}`)}
-              class="btn btn-primary"
-            >
-              Xem chi tiết
-            </button>
-          </div>
-        </div>
+        <JobCard
+          url={"/job"}
+          id={job.id}
+          typeName={job["type.name"]}
+          name={job.name}
+          createdDate={job.createdDate}
+          expiredDate={job.expiredDate}
+        />
       ))}
     </div>
   );

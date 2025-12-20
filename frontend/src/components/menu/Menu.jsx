@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 import "./styles.css";
 import { useContext } from "react";
 import UserContext from "../../context";
@@ -52,10 +52,10 @@ const Menu = ({ children }) => {
             >
               <img
                 src={user?.avatar}
-                alt=""
+                alt="not found"
                 width="32"
                 height="32"
-                class="rounded-circle me-2"
+                className="rounded-circle me-2"
               />
               <strong>{user?.name}</strong>
             </a>

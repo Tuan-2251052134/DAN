@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { handleError } from "../../../../../utils/errorAlertUtil";
 import { authApiUtil, end_point } from "../../../../../utils/apiUtil";
 import Form from "../../../../../components/form/Form";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 const BusinessApplyDetail = () => {
   const { applyId } = useParams();

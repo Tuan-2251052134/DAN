@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import AppSelect from "../appSelect/AppSelect";
 import "./styles.css";
 
@@ -12,13 +12,13 @@ const SearchBar = ({ fields, setParentParams }) => {
   return (
     <div className="d-flex gap-2 align-items-center w-100 ps-2 pe-2">
       {fields.map((field, index) => (
-        <>
+        <Fragment key={index}>
           {field.type === "text" && (
             <div className={"w-100"}>
               <input
                 type="text"
                 key={index}
-                class="form-control"
+                className="form-control"
                 id="exampleInputText"
                 onChange={(event) => {
                   setParams({ ...params, [field.key]: event.target.value });
@@ -38,7 +38,7 @@ const SearchBar = ({ fields, setParentParams }) => {
               />
             </div>
           )}
-        </>
+        </Fragment>
       ))}
       <div>
         <button className="btn btn-primary submit" onClick={submit}>

@@ -2,11 +2,11 @@ import Select from "react-select";
 import AppSelect from "../appSelect/AppSelect";
 import "./styles.css";
 import { handleError } from "../../utils/errorAlertUtil";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { authApiUtil, end_point } from "../../utils/apiUtil";
-import { useNavigate } from "react-router-dom";
-import timeUtil from "../../utils/timeUtil";
+import { useNavigate } from "react-router";
 import Loading from "../Loading/Loading";
+import timeUtil from "./timeUtil";
 
 const Form = ({
   fields,
@@ -99,16 +99,16 @@ const Form = ({
     <form onSubmit={submit} className={`form ${col4 ? "col-4" : "col-8"}`}>
       {fields.map((field, index) => {
         return (
-          <>
+          <Fragment key={index}>
             {textInputList.includes(field.type) && (
-              <div class="mb-3" key={index}>
-                <label for={`input${index}`} class="form-label">
+              <div className="mb-3">
+                <label htmlFor={`input${index}`} className="form-label">
                   {field.label}
                 </label>
                 <input
                   disabled={field.disabled}
                   type={field.type}
-                  class="form-control"
+                  className="form-control"
                   id={`input${index}`}
                   value={
                     field.type === "datetime-local"
@@ -122,14 +122,14 @@ const Form = ({
               </div>
             )}
             {field.type === "file" && (
-              <div class="mb-3" key={index}>
-                <label for={`input${index}`} class="form-label">
+              <div className="mb-3" key={index}>
+                <label htmlFor={`input${index}`} className="form-label">
                   {field.label}
                 </label>
                 <input
                   disabled={field.disabled}
                   type={field.type}
-                  class="form-control"
+                  className="form-control"
                   id={`input${index}`}
                   onChange={(event) => {
                     setData({ ...data, [field.key]: event.target.files[0] });
@@ -138,22 +138,22 @@ const Form = ({
               </div>
             )}
             {field.type === "checkbox" && (
-              <div class="form-check">
+              <div className="form-check">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   value={field.value}
                   disabled={field.disabled}
                   id={`input${index}`}
                 />
-                <label class="form-check-label" for={`input${index}`}>
+                <label className="form-check-label" htmlFor={`input${index}`}>
                   {field.label}
                 </label>
               </div>
             )}
             {field.type === "app-select" && (
-              <div class="mb-3" key={index}>
-                <label for={`input${index}`} class="form-label">
+              <div className="mb-3">
+                <label htmlFor={`input${index}`} className="form-label">
                   {field.label}
                 </label>
                 <AppSelect
@@ -180,8 +180,8 @@ const Form = ({
               </div>
             )}
             {field.type === "iframe" && (
-              <div class="mb-3" key={index}>
-                <label for={`input${index}`} class="form-label">
+              <div className="mb-3">
+                <label htmlFor={`input${index}`} className="form-label">
                   {field.label}
                 </label>
                 <div id={`input${index}`}>
@@ -190,7 +190,7 @@ const Form = ({
               </div>
             )}
             {field.type === "image" && (
-              <div class="mb-3" key={index}>
+              <div className="mb-3">
                 <div className="d-flex flex-column gap-3 align-items-center justify-content-center">
                   <img
                     src={
@@ -203,7 +203,7 @@ const Form = ({
                   />
                 </div>
                 <input
-                  class="form-control mt-2"
+                  className="form-control mt-2"
                   disabled={field.disabled}
                   type={"file"}
                   id={`input${index}`}
@@ -215,8 +215,8 @@ const Form = ({
             )}
 
             {field.type === "select" && (
-              <div className="mb-3" key={index}>
-                <label for={`input${index}`} class="form-label">
+              <div className="mb-3">
+                <label htmlFor={`input${index}`} className="form-label">
                   {field.label}
                 </label>
                 <Select
@@ -233,14 +233,14 @@ const Form = ({
               </div>
             )}
             {field.type === "textarea" && (
-              <div class="mb-3" key={index}>
-                <label for={`input${index}`} class="form-label">
+              <div className="mb-3">
+                <label htmlFor={`input${index}`} className="form-label">
                   {field.label}
                 </label>
                 <textarea
                   disabled={field.disabled}
                   value={data[field.key]}
-                  class="form-control"
+                  className="form-control"
                   id={`input${index}`}
                   onChange={(value) => {
                     setData({ ...data, [field.key]: value.target.value });
@@ -248,7 +248,7 @@ const Form = ({
                 />
               </div>
             )}
-          </>
+          </Fragment>
         );
       })}
       {!id ? (
@@ -271,8 +271,9 @@ const Form = ({
               Xoá
             </button>
           )}
-          {extraButtons.map((button) => (
+          {extraButtons.map((button, index) => (
             <button
+              key={index}
               type="button"
               onClick={() => {
                 button.click(data);

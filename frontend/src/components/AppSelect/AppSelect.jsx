@@ -95,7 +95,6 @@ const AppSelect = ({
 
   return (
     <Select
-      data-testid="app-select"
       value={data.filter((item) => item.id === value)[0] ?? 0}
       onMenuOpen={onMenuOpen}
       onMenuClose={onMenuClose}

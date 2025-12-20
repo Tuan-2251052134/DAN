@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import Form from "../../../../../components/form/Form";
 
 const BusinessJobDetail = () => {
@@ -70,7 +70,7 @@ const BusinessJobDetail = () => {
   };
 
   return (
-    <div className="mt-5 d-flex justify-content-center">
+    <div className="mt-5 d-flex justify-content-center mb-5">
       <Form
         defaultValue={{ status: "WAIT" }}
         fields={fields}

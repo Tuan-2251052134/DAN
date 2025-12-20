@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import "./styles.css";
 import { authApiUtil, end_point } from "../../utils/apiUtil";
 import { handleError } from "../../utils/errorAlertUtil";
@@ -61,29 +61,31 @@ const Table = ({ list, setList, url, endPointKey, fields, searchFields }) => {
     getList();
   }, [params]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  // if (isLoading) {
+  //   return <Loading />;
+  // }
 
   return (
     <>
       <SearchBar fields={searchFields} setParentParams={setParams} />
       <div className="table-responsive w-100">
-        <table class="table table-hover">
+        <table className="table table-hover">
           <thead>
             <tr>
-              {fields.map((item) => (
-                <th scope="col">{map[item]}</th>
+              {fields.map((item, index) => (
+                <th scope="col" key={index}>
+                  {map[item]}
+                </th>
               ))}
               <th>Chi tiết</th>
               <th>Xoá</th>
             </tr>
           </thead>
           <tbody>
-            {list.map((object) => (
-              <tr>
-                {fields.map((field) => (
-                  <td>
+            {list.map((object, index) => (
+              <tr key={object.id}>
+                {fields.map((field, index) => (
+                  <td key={index}>
                     {field === "avatar" ? (
                       <img className="w-20px" src={object[field]} />
                     ) : (

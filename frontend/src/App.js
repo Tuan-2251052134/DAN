@@ -6,7 +6,7 @@ import {
   Route,
   Routes,
   useNavigate,
-} from "react-router-dom";
+} from "react-router";
 import "./App.css";
 import HeaderMenu from "./components/headerMenu/HeaderMenu";
 import Menu from "./components/menu/Menu";
@@ -29,7 +29,7 @@ import BusinessApplyList from "./screens/auth/business/apply/BusinessApplyList/B
 import BusinessJobCreate from "./screens/auth/business/job/BusinessJobCreate/BusinessJobCreate";
 import BusinessJobDetail from "./screens/auth/business/job/BusinessJobDetail/BusinessJobDetail";
 import BusinessJobList from "./screens/auth/business/job/BusinessjobList/BusinessJobList";
-import Profile from "./screens/auth/Profile";
+import Profile from "./screens/auth/profile/Profile";
 import Home from "./screens/public/Home/Home";
 import Login from "./screens/public/Login";
 import PublicJobDetail from "./screens/public/PublicJobDetail/PublicJobDetail";
