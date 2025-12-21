@@ -44,7 +44,7 @@ const setRouter = (app) => {
     ]),
     securityFilter.getUpdateFilter(
       userService,
-      ["id", "email"],
+      ["id", "email", "role"],
       [{ key: "districtId", service: districtService }],
       "bản thân",
       true
