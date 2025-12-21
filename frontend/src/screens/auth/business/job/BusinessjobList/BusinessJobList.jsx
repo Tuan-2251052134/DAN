@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import Form from "../../../../../components/form/Form";
-import { apiUtil, authApiUtil, end_point } from "../../../../../utils/apiUtil";
 import { useNavigate } from "react-router";
-import "./styles.css";
-import { handleError } from "../../../../../utils/errorAlertUtil";
-import UserContext from "../../../../../context";
-import SearchBar from "../../../../../components/searchBar/SearchBar";
 import JobCard from "../../../../../components/jobCard/JobCard";
+import SearchBar from "../../../../../components/searchBar/SearchBar";
+import UserContext from "../../../../../context";
+import { authApiUtil, end_point } from "../../../../../utils/apiUtil";
+import { handleError } from "../../../../../utils/errorAlertUtil";
+import "./styles.css";
 
 const BusinessJobList = () => {
   const [jobs, setJobs] = useState([]);
@@ -62,6 +61,7 @@ const BusinessJobList = () => {
       </div>
       {jobs.map((job) => (
         <JobCard
+          key={job.id}
           typeName={job["type.name"]}
           name={job.name}
           createdDate={job.createdDate}

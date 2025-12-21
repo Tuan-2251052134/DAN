@@ -36,7 +36,7 @@ const Login = () => {
   ];
 
   return (
-    <div class="d-flex justify-content-center mt-5">
+    <div className="d-flex justify-content-center mt-5">
       <Form fields={fields} customSubmit={submit} col4={true} />
     </div>
   );

@@ -26,18 +26,18 @@ const BusinessApplyList = () => {
       </div>
       <div className="d-flex flex-wrap gap-5 mb-5 mt-5">
         {applies.map((item) => (
-          <div class="card" style={{ width: "20rem" }}>
+          <div className="card" key={item.id} style={{ width: "20rem" }}>
             <iframe
-              class="card-img-top"
+              className="card-img-top"
               src={item["cv.url"]}
               alt="Card image cap"
             />
-            <div class="card-body">
-              <h5 class="card-title">{item["cv.name"]}</h5>
-              <p class="card-text">Ngày ứng tuyển: {item.createdDate}</p>
-              <p class="card-text">Trạng thái: {item.status}</p>
+            <div className="card-body">
+              <h5 className="card-title">{item["cv.name"]}</h5>
+              <p className="card-text">Ngày ứng tuyển: {item.createdDate}</p>
+              <p className="card-text">Trạng thái: {item.status}</p>
               <a
-                class="btn btn-primary"
+                className="btn btn-primary"
                 onClick={async () => {
                   navigate(`/business/job/${id}/apply/${item.id}`);
                 }}
