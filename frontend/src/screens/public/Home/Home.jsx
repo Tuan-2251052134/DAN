@@ -33,7 +33,6 @@ const Home = () => {
       url += `&status=PASS`;
 
       const res = await apiUtil.get(url);
-      console.log(res.data.data);
       setJobs(res.data.data);
     } catch (ex) {
       handleError(ex);

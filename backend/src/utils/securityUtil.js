@@ -24,6 +24,7 @@ const decodeJwt = (token) => {
     return decoded;
     next();
   } catch (err) {
+    console.log(err);
     throw new AppError("Token sai hoặc hết hạn", 403);
   }
 };

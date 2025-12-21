@@ -17,6 +17,7 @@ const getRolesFilter = (roles) => {
 
     if (token) {
       const decoded = securityUtil.decodeJwt(token);
+
       if (!roles.includes(decoded.role) && !roles.includes("ANY")) {
         throw new AppError("Không có quyền truy cập", 403);
       }
@@ -38,15 +39,17 @@ const getDeleteFilter = (service, checkers, key, label) => {
     const obj = await service.getOne({ id });
 
     if (!obj) {
-      throw new AppError(`Không tìm thấy ${label}`, 400);
+      throw new AppError(`Không tìm thấy ${label}`, 401);
     }
 
+
     if (obj.userId !== user.id && user.role != "ADMIN") {
-      throw new AppError(`Không thể xoá ${label} không phải của mình`, 400);
+      throw new AppError(`Không thể xoá ${label} không phải của mình`, 401);
     }
 
     for (let checker of checkers) {
-      const refObj = await check.service.getOne({ [key]: obj.id });
+      const refObj = await checker.service.getOne({ [key]: obj.id });
+      console.log(refObj)
       if (refObj) {
         throw new AppError(
           `Vẫn đang có ${checker.label} thuộc đối tượng này`,
@@ -54,6 +57,8 @@ const getDeleteFilter = (service, checkers, key, label) => {
         );
       }
     }
+
+    console.log("gg");
 
     req.obj = obj;
     next();

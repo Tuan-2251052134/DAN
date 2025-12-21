@@ -106,7 +106,6 @@ const Profile = () => {
       const res = await authApiUtil().get(
         `${end_point["apply"]}?offset=${offset}`
       );
-      console.log(res.data.data);
       setApplies(res.data.data);
     } catch (ex) {
       handleError(ex);
