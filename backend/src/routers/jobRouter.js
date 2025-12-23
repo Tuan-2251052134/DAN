@@ -2,7 +2,6 @@ const { Router } = require("express");
 const securityFilter = require("../filters/securityFilter");
 const jobController = require("../controllers/jobController");
 const jobService = require("../services/jobService");
-const applyService = require("../services/applyService");
 const userService = require("../services/userService");
 const typeService = require("../services/typeService");
 

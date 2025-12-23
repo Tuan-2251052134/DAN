@@ -16,7 +16,8 @@ const setRouter = (app) => {
       [
         { key: "userId", service: userService, label: "người dùng" },
         { key: "jobId", service: jobService, label: "công việc" },
-      ]
+      ],
+      "ứng tuyển cho người khác"
     ),
     applyController.createApply
   );

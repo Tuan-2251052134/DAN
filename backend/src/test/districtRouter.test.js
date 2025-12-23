@@ -4,10 +4,11 @@ jest.mock("../services/districtService");
 
 const request = require("supertest");
 const express = require("express");
-const { setRouter } = require("../routers/cityRouter");
+const { setRouter } = require("../routers/districtRouter");
 
 let app;
-beforeEach(() => {
+
+beforeAll(() => {
   app = express();
   app.use(express.json());
   setRouter(app);
@@ -16,42 +17,49 @@ beforeEach(() => {
 const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZGlzdHJpY3RJZCI6MSwiYWRkcmVzcyI6IjcwIEjDoCBUw7RuIFF1eeG7gW4gIiwicm9sZSI6IkFETUlOIiwibmFtZSI6IlR1YW5BZG1pbiIsImVtYWlsIjoibHlnaWF0dWFuQWRtaW5AZ21haWwuY29tIiwiYXZhdGFyIjoiaHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZHg2YnJjb2ZlL2ltYWdlL3VwbG9hZC92MTc2NDM0NzgwNC9qYnVpYmY4Nm1kbnNqbmF5MTF4ZS5qcGciLCJpYXQiOjE3NjYyOTQ4OTJ9.ARF0vsSj8_wHeI2-Uqxo_96mHCQ5oh3Njz94ijE5HA0";
 
-describe("City Router", () => {
-  it("GET /api/city should return all cities", async () => {
-    const res = await request(app).get("/api/city");
+describe("District Router (no mock)", () => {
+  test("GET /api/district", async () => {
+    const res = await request(app).get("/api/district");
+
     expect(res.status).toBe(200);
-    expect(res.body.data.length).toBeGreaterThan(0);
   });
 
-  it("POST /api/city should create a city", async () => {
+  test("GET /api/district/:id", async () => {
+    const res = await request(app).get("/api/district/1");
+
+    expect(res.status).toBe(200);
+  });
+
+  test("POST /api/district", async () => {
     const res = await request(app)
-      .post("/api/city")
+      .post("/api/district")
       .set("Authorization", `Bearer ${token}`)
-      .send({ name: "New City" });
+      .send({
+        name: "Quận Test",
+        cityId: 1,
+      });
 
     expect(res.status).toBe(201);
-    expect(res.body.data.name).toBe("New City");
   });
 
-  it("GET /api/city/:id should return a city", async () => {
-    const res = await request(app).get("/api/city/1");
-    expect(res.status).toBe(200);
-    expect(res.body.data.id).toBe(1);
-  });
-
-  it("PUT /api/city/:id should update a city", async () => {
+  test("PUT /api/district/:id", async () => {
     const res = await request(app)
-      .put("/api/city/1")
+      .put("/api/district/1")
       .set("Authorization", `Bearer ${token}`)
-      .send({ id: 1, name: "Updated City" });
+      .send({
+        id: 1,
+        name: "Quận Update",
+        cityId: 1,
+      });
+
     expect(res.status).toBe(200);
-    expect(res.body.data.name).toBe("Updated City");
   });
 
-  it("DELETE /api/city/:id should delete a city", async () => {
+  test("DELETE /api/district/:id", async () => {
     const res = await request(app)
-      .delete("/api/city/1")
+      .delete("/api/district/1")
       .set("Authorization", `Bearer ${token}`);
+
     expect(res.status).toBe(204);
   });
 });

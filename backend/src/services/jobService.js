@@ -1,6 +1,5 @@
 const { Op } = require("sequelize");
 const { Job, Type, User, Message, sequelize } = require("../models");
-const { raw } = require("mysql2");
 const AppError = require("../configs/AppError");
 
 const getOne = async ({ id, typeId }) => {

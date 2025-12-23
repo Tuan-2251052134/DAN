@@ -22,9 +22,7 @@ const decodeJwt = (token) => {
     const secret = process.env.JWT_SECRET;
     const decoded = jwt.verify(token, secret);
     return decoded;
-    next();
   } catch (err) {
-    console.log(err);
     throw new AppError("Token sai hoặc hết hạn", 403);
   }
 };

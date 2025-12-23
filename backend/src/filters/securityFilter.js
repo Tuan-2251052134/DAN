@@ -17,7 +17,6 @@ const getRolesFilter = (roles) => {
 
     if (token) {
       const decoded = securityUtil.decodeJwt(token);
-
       if (!roles.includes(decoded.role) && !roles.includes("ANY")) {
         throw new AppError("Không có quyền truy cập", 403);
       }
@@ -42,14 +41,12 @@ const getDeleteFilter = (service, checkers, key, label) => {
       throw new AppError(`Không tìm thấy ${label}`, 401);
     }
 
-
     if (obj.userId !== user.id && user.role != "ADMIN") {
       throw new AppError(`Không thể xoá ${label} không phải của mình`, 401);
     }
 
     for (let checker of checkers) {
       const refObj = await checker.service.getOne({ [key]: obj.id });
-      console.log(refObj)
       if (refObj) {
         throw new AppError(
           `Vẫn đang có ${checker.label} thuộc đối tượng này`,
@@ -57,8 +54,6 @@ const getDeleteFilter = (service, checkers, key, label) => {
         );
       }
     }
-
-    console.log("gg");
 
     req.obj = obj;
     next();
@@ -97,11 +92,11 @@ const getCreateFilter = (keys, roles, foreignFields, label) => {
         throw new AppError(`không để trống trường: ${key}`, 400);
       }
     }
+
     if (user) {
       if (user.role === "ADMIN") {
         if (keys.includes("userId")) {
           const foundUser = await userService.getOne({ id: body.userId });
-
           if (!roles.includes(foundUser.role)) {
             throw new AppError(
               `Không thể tạo cho vai trò ${foundUser.role}`,
@@ -142,9 +137,8 @@ const getUpdateFilter = (
     const body = req.body;
 
     body.file = file;
-
     const obj = await service.getOne({ id });
-
+    
     if (!obj) {
       throw new AppError(`Không tìm thấy ${label} này`, 400);
     }
@@ -163,7 +157,7 @@ const getUpdateFilter = (
         currentField = obj[field].toISOString();
       }
 
-      if (`${body[field]}` != currentField) {
+      if (`${body[field]}` != `${currentField}`) {
         throw new AppError(`Không thể thay đổi trường: ${field}`, 400);
       }
     }

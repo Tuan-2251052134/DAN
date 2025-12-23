@@ -11,7 +11,7 @@ const mockUsers = [
       "https://res.cloudinary.com/dx6brcofe/image/upload/v1764347804/jbuibf86mdnsjnay11xe.jpg",
   },
   {
-    id: 1,
+    id: 2,
     name: "TuanBusiness",
     email: "lygiatuanBusiness@gmail.com",
     password: "$2b$10$AAY9WFG0MQNd.x5oLbnMve1DAYe5QztYPIhsYvju87xtvsDWO7cBO",
@@ -50,7 +50,7 @@ module.exports = {
 
   getOne: jest.fn(async ({ email, id }) => {
     return mockUsers.find(
-      (u) => (email && u.email === email) || (id && u.id === id)
+      (u) => (email && u.email === email) || (id && `${u.id}` === `${id}`)
     );
   }),
 

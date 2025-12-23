@@ -28,7 +28,7 @@ const createJob = async (req, res) => {
 
   const createdJob = await jobService.create({ job, message });
 
-  res.status(200).json({ data: createdJob, errorMessage: null });
+  res.status(201).json({ data: createdJob, errorMessage: null });
 };
 
 const getJobs = async (req, res) => {
@@ -43,8 +43,7 @@ const getJobs = async (req, res) => {
     status = "PASS";
   }
 
-
-  if ((userId && user.id != userId) && user.role !== "ADMIN") {
+  if (userId && user.id != userId && user.role !== "ADMIN") {
     throw new AppError("Bạn không có quyền xem", 401);
   }
 
@@ -62,7 +61,7 @@ const getJob = async (req, res) => {
   const id = req.params.id;
   const user = req.user;
 
-  const job = await jobService.getOne({ id, status: "PASS" });
+  const job = await jobService.getOne({ id });
   if (job.status !== "PASS" && job.userId != user?.id && user.role != "ADMIN") {
     throw new AppError("Không thể xem chi tiết công việc này", 403);
   }
@@ -83,7 +82,7 @@ const updateJob = async (req, res) => {
     throw new AppError("không thể thay đối trạng thái khác ngoài Đợi", 400);
   }
 
-  if (job.expriredDate < new Date()) {
+  if (job.expiredDate < new Date()) {
     throw new AppError("Kông thể set thời gian trc thời gian hiện tại", 400);
   }
 

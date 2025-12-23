@@ -34,7 +34,7 @@ const updateDistrict = async (req, res) => {
 const deleteDistrict = async (req, res) => {
   const id = req.params.id;
   await districtService.deleteOne({ id });
-  res.status(200).json();
+  res.status(204).json();
 };
 
 module.exports = {

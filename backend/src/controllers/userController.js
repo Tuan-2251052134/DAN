@@ -56,7 +56,7 @@ const register = async (req, res) => {
   user.avatar = await uploadFileUtil.uploadFile(req.file.buffer);
   const newUser = await userSerivce.register({ user });
 
-  res.status(200).json({ data: newUser, errorMessage: null });
+  res.status(201).json({ data: newUser, errorMessage: null });
 };
 
 const getUsers = async (req, res) => {
@@ -97,7 +97,7 @@ const updateUserProfile = async (req, res) => {
   const files = req.files;
   const body = req.body;
   const user = req.user;
-
+  
   if (files.cv?.[0]) {
     body.cv = await uploadFileUtil.uploadFile(files.cv[0].buffer);
   }
@@ -115,7 +115,6 @@ const getUserProfile = async (req, res) => {
   const detailData = await userSerivce.getDetailOne({ id });
   res.json({ data: detailData, errorMessage: null });
 };
-
 
 module.exports = {
   login,
